@@ -5,7 +5,8 @@ import SiteMeta from '../components/SiteMeta';
 const StoreFront: FC = () => (
     <>
         <SiteMeta />
-        <p>Storefront</p>
+
+        <Header />
     </>
 );
 

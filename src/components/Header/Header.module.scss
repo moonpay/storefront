@@ -1,0 +1,65 @@
+.header {
+    background-color: var(--color-black);
+}
+
+.headerContainer {
+    display: grid;
+    max-width: 1600px;
+    grid-template-areas: 'wallet'
+                          'logo'
+                          'counters';
+    padding: var(--spacing-large);
+    margin: 0 auto;
+    gap: var(--spacing-large);
+
+    @media screen and (min-width: 1024px) {
+        grid-template-areas: 'logo wallet counters';
+    }
+}
+
+.logo {
+    grid-area: logo;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+
+    @media screen and (min-width: 1024px) {
+        margin: 0;
+    }
+}
+
+.timers {
+    grid-area: counters;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    @media screen and (min-width: 1024px) {
+        justify-content: flex-end;
+    }
+}
+
+.connectedWallet {
+    grid-area: wallet;
+    display: flex;
+    justify-content: center;
+}
+
+.countdown {
+    display: flex;
+    border-radius: var(--border-radius-regular);
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: var(--spacing-regular);
+}
+
+.countdownLive {
+    background-color: rgba(var(--color-primary), 0.2);
+    border: 1px solid rgba(var(--color-primary), 0.4);
+}
+
+.countdownTitle {
+    color: var(--color-white);
+    text-transform: uppercase;
+    font-family: var(--font-family-secondary);
+}
