@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { HelmetProvider } from 'react-helmet-async';
+import { ContentProvider } from './context/ContentContext';
+import { ContractProvider } from './context/ContractContext';
+import { ThemeProvider } from './context/ThemeContext';
+import StoreFront from './pages/StoreFront';
+import ConfigurationImporter from './utils/ConfigurationImporter';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const configurationImporter = new ConfigurationImporter();
+
+const App = () => {
+    return (
+        <HelmetProvider>
+            <ThemeProvider configurationImporter={configurationImporter}>
+                <ContentProvider configurationImporter={configurationImporter}>
+                    <ContractProvider configurationImporter={configurationImporter}>
+                        <StoreFront /> {/** Could replace this with a router for more complex stores */}
+                    </ContractProvider>
+                </ContentProvider>
+            </ThemeProvider>
+        </HelmetProvider>
+    );
+};
 
 export default App;

@@ -1,46 +1,23 @@
-# Getting Started with Create React App
+# Collection Storefront
+<!-- TODO: write what the purpose of this repo is -->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Configuration
+---
+<!-- TODO: explain why this is configurable and how -->
+### Contract Configuration
+These values can be found under the `Developer` tab of your contract in the [HyperMint Dashboard](https://app.hypermint.com/)
 
-## Available Scripts
+### Theme Configuration
 
-In the project directory, you can run:
+### Content Configuration
+This will configure the title and description of the collection, as well as the site metadata used by crawlers to display the site on search engines.
 
-### `npm start`
+> ⚠️ This project is not server side rendered so is not optimised for SEO. It is also worth noting the title and description meta only gets loaded after JavaScript is injected into the page so to get more reliable results across different search enginers it is best to also edit `index.html` with static metadata.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Development
+---
+<!-- TODO: write steps on how to set this up for development -->
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deployment
+---
+<!-- TODO: write steps on how to deploy this (maybe reccomend a provider (netlify?)) -->

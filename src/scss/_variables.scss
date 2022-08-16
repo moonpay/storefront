@@ -1,0 +1,25 @@
+:root {
+    // Colors
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-primary: 22, 230, 181;
+
+    // Borders
+    --border-radius-regular: 8px;
+
+    // Fonts
+    --font-family-primary: 'Helvetica';
+    --font-family-secondary: 'Ubuntu Mono';
+
+    // Spacing
+    --spacing-xxsmall: .25rem;
+    --spacing-xsmall: .5rem;
+    --spacing-small: .75rem;
+    --spacing-regular: 1rem;
+    --spacing-large: 1.25rem;
+    --spacing-xlarge: 1.5rem;
+}
+
+// Sass variables for where CSS variables are lacking
+$breakpoint-small: 768px;
+$breakpoint-medium: 1024px;
