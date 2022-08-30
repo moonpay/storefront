@@ -1,0 +1,21 @@
+.main {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+}
+
+.layout {
+    align-items: center;
+    display: grid;
+    gap: var(--spacing-xxlarge);
+    // margin-bottom: 200px; // prevents being dead center
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1280px) {
+        gap: calc(var(--spacing-xxlarge) * 5);
+        grid-template-columns: 1fr 1fr;
+    }
+}

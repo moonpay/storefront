@@ -1,0 +1,14 @@
+.button {
+    appearance: none;
+    border: 0;
+    background-color: rgb(var(--color-grey-light));
+    padding: var(--spacing-small) var(--spacing-large);
+    border-radius: var(--border-radius-large);
+    font-family: Luna;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semiBold);
+}
+
+.connectButton {
+    background-color: rgb(var(--color-primary));
+}

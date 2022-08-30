@@ -1,0 +1,59 @@
+.card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(24px);
+    padding: var(--spacing-xlarge);
+    border-radius: var(--border-radius-regular);
+    max-width: 300px;
+    border: 1px solid
+}
+
+.title {
+    color: var(--color-white);
+    font-size: var(--font-size-h2);
+    margin-top: 0;
+    font-weight: var(--font-weight-semiBold);
+}
+
+// TODO: test different images here
+.image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.form {
+    margin-top: var(--spacing-large);
+}
+
+.inputWrap {
+    display: flex;
+    margin-bottom: var(--spacing-regular);
+}
+
+.input {
+    appearance: none;
+    background-color: rgba(246, 246, 247, 0.12);
+    border-radius: var(--border-radius-regular);
+    border: 0;
+    color: var(--color-white);
+    flex-grow: 1;
+    padding: var(--spacing-regular) var(--spacing-small);
+}
+
+.inputHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-small);
+}
+
+.inputContent {
+    color: var(--color-white);
+}
+
+.quantityInput {
+    opacity: 1;
+}
+
+.breakdownShowing {
+    opacity: 0;
+}
