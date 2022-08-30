@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createContext, FC, useEffect, useState } from 'react';
+// import { useSigner } from 'wagmi';
 import { ConfigType } from '../types/Config';
 import { IContractContext, IContractProvider } from '../types/context/IContractContext';
 import { IHyperMintContract, INFTContract } from '../types/HyperMint/IContract';
@@ -12,13 +13,14 @@ export const ContractContext = createContext<IContractContext>({} as IContractCo
 export const ContractProvider: FC<IContractProvider> = ({ children, configurationImporter }) => {
     const [hyperMintContract, setHyperMintContract] = useState<IHyperMintContract>();
     const [nftContract, setNftContract] = useState<INFTContract>();
+    // const { data: signer } = useSigner();
 
     useEffect(() => {
-        (async () => {
-            const config = await configurationImporter.loadConfig(ConfigType.CONTRACT);
+        const config = configurationImporter.loadConfig(ConfigType.CONTRACT);
+        const contract: IHyperMintContract = new Contract(config);
+        // contract.connect(signer);
 
-            setHyperMintContract(new Contract(config));
-        })();
+        setHyperMintContract(contract);
     }, []);
 
     useEffect(() => {

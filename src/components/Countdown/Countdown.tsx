@@ -19,11 +19,6 @@ const Countdown: FC<CountdownProps> = ({ until, onEndReached, className }) => {
     const [remainingSeconds, setRemainingSeconds] = useState(0);
     const [endReached, setEndReached] = useState(false);
 
-    const shouldShowDays = useMemo(() => remainingDays > 1, [remainingDays]);
-    const shouldShowHours = useMemo(() => remainingHours > 1, [remainingHours]);
-    const shouldShowMinutes = useMemo(() => (!shouldShowDays && shouldShowHours) || !shouldShowHours, [shouldShowDays, shouldShowHours]);
-    const shouldShowSeconds = useMemo(() => !shouldShowDays && !shouldShowHours, [shouldShowDays, shouldShowHours]);
-
     const calculateRemainingTime = () => {
         const now = new Date();
         if (!until) {
@@ -31,7 +26,6 @@ const Countdown: FC<CountdownProps> = ({ until, onEndReached, className }) => {
         }
 
         const timeDiff = until.getTime() - now.getTime();
-        console.log('🚀 ~ file: Countdown.tsx ~ line 38 ~ calculateRemainingTime ~ until', until);
 
         const days = Math.floor(timeDiff / day);
         const hours = Math.floor((timeDiff % day) / hour);

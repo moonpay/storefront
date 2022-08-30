@@ -1,0 +1,16 @@
+.footer {
+    padding: var(--spacing-small) 0;
+    margin-top: auto;
+}
+
+.branding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    color: var(--color-white);
+    margin-right: var(--spacing-xsmall);
+    opacity: .5;
+}

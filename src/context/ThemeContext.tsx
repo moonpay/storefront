@@ -10,11 +10,9 @@ export const ThemeProvider: FC<IThemeProvider> = ({ children, configurationImpor
     const [images, setImages] = useState<IThemeImages>();
 
     useEffect(() => {
-        (async () => {
-            const config = await configurationImporter.loadConfig(ConfigType.THEME);
-            setImages(config.images);
-            setColors(config.colors);
-        })();
+        const config = configurationImporter.loadConfig(ConfigType.THEME);
+        setImages(config.images);
+        setColors(config.colors);
     }, []);
 
     return (

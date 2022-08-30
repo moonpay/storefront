@@ -5,7 +5,7 @@ export interface IMetadataContent {
 }
 
 export interface ICollectionContent {
-    heading: string;
+    title: string;
     description: string;
 }
 

@@ -3,13 +3,27 @@
     --color-white: #ffffff;
     --color-black: #000000;
     --color-primary: 22, 230, 181;
+    --color-grey-light: 237, 237, 239;
+    --color-state-error: 243, 174, 165;
 
     // Borders
     --border-radius-regular: 8px;
+    --border-radius-large: 22px;
 
     // Fonts
     --font-family-primary: 'Helvetica';
     --font-family-secondary: 'Ubuntu Mono';
+
+    --font-size-h1: 80px;
+    --font-size-h2: 18px;
+    --font-size-h3: 14px;
+    --font-size-body: 16px;
+
+    --font-weight-bold: 700;
+    --font-weight-semiBold: 600;
+    --font-weight-medium: 500;
+    --font-weight-regular: 400;
+    --font-weight-light: 300;
 
     // Spacing
     --spacing-xxsmall: .25rem;
@@ -18,8 +32,5 @@
     --spacing-regular: 1rem;
     --spacing-large: 1.25rem;
     --spacing-xlarge: 1.5rem;
+    --spacing-xxlarge: 2.5rem;
 }
-
-// Sass variables for where CSS variables are lacking
-$breakpoint-small: 768px;
-$breakpoint-medium: 1024px;

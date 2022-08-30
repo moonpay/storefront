@@ -1,15 +1,20 @@
-import { FC, useContext, useState } from 'react';
-import { ContractContext } from '../../context/ContractContext';
-import Countdown from '../Countdown';
-import logo from '../../assets/logo.png';
-import ConnectedWallet from '../ConnectedWallet';
+import { FC, useContext } from 'react';
+import { ContractContext } from '../../../context/ContractContext';
+import Countdown from '../../Countdown';
+import logo from '../../../assets/logo.png';
+import ConnectedWallet from '../../Wallet/ConnectedWallet';
 import styles from './Header.module.scss';
 
-const Header: FC = () => {
-    const [publicSaleLive, setPublicSaleLive] = useState(false);
-    const [privateSaleLive, setPrivateSaleLive] = useState(false);
+interface IHeader {
+    publicSaleLive: boolean;
+    privateSaleLive: boolean;
+    privateSaleDate?: Date;
+    setPublicSaleLive: (isLive: boolean) => void;
+    setPrivateSaleLive: (isLive: boolean) => void;
+}
 
-    const contract = useContext(ContractContext);
+const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, setPublicSaleLive, setPrivateSaleLive }) => {
+    const { nftContract } = useContext(ContractContext);
 
     return (
         <header className={styles.header}>
@@ -22,23 +27,22 @@ const Header: FC = () => {
                     <ConnectedWallet />
                 </section>
 
-                {!!contract.nftContract && (
+                {!!nftContract && (
                     <section className={styles.timers}>
                         <div className={`${styles.countdown} ${publicSaleLive && styles.countdownLive}`}>
                             <p className={styles.countdownTitle}>Public Sale &nbsp;</p>
                             <Countdown
-                                until={contract.nftContract?.publicSaleAt}
+                                until={nftContract?.publicSaleAt}
                                 onEndReached={() => setPublicSaleLive(true)}
                                 className={styles.countdownTitle}
                             />
                         </div>
 
-                        {/* If the wallet is connected and they are not on the whitelist then we shouldnt show this */}
-                        {!publicSaleLive && (
+                        {(!publicSaleLive && !!privateSaleDate) && (
                             <div className={`${styles.countdown} ${privateSaleLive && styles.countdownLive}`}>
                                 <p className={styles.countdownTitle}>Private Sale &nbsp;</p>
                                 <Countdown
-                                    until={new Date(1660649042274)}
+                                    until={privateSaleDate}
                                     onEndReached={() => setPrivateSaleLive(true)}
                                     className={styles.countdownTitle}
                                 />

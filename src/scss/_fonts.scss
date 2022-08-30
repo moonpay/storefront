@@ -1,1 +1,33 @@
-@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:regular')
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:regular,bold');
+
+@font-face {
+    font-family: Luna-Condensed;
+    src: url('../assets/fonts/Luna-UltraCondensedBold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Luna-Expanded;
+    src: url('../assets/fonts/Luna-ExpandedMedium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Luna;
+    src: url('../assets/fonts/Luna-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Luna;
+    src: url('../assets/fonts/Luna-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}

@@ -4,13 +4,9 @@ export interface ITokenMetadata {
     image: string;
 }
 
-interface ITokenAllocationBreakdown {
+export interface ITokenAllocationBreakdown {
     remainingAllocation?: number;
     pricePerToken: number;
-}
-
-export interface ITokenAllocation {
-    allocation: ITokenAllocationBreakdown[]
 }
 
 export interface IToken {

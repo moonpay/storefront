@@ -1,0 +1,18 @@
+.card {
+    background-color: var(--color-white);
+    padding: var(--spacing-xxlarge);
+    border-radius: var(--border-radius-regular);
+}
+
+.cardContentBlock {
+    margin-bottom: var(--spacing-xxlarge);
+}
+
+.cardContent {
+    color: var(--color-black);
+}
+
+.cardHeader {
+    margin-top: 0;
+    margin-bottom: var(--spacing-large);
+}

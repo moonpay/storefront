@@ -7,19 +7,16 @@ export const ContentContext = createContext<IContentContext>({} as IContentConte
 
 export const ContentProvider: FC<IContentProvider> = ({ children, configurationImporter }) => {
     const [metadata, setMetadata] = useState<IMetadataContent>();
-    const [collectionContent, setCollectionContent] = useState<ICollectionContent>();
+    const [collection, setCollection] = useState<ICollectionContent>();
 
     useEffect(() => {
-        console.log('mounted');
-        (async () => {
-            const config = await configurationImporter.loadConfig(ConfigType.CONTENT);
-            setMetadata(config.metadata);
-            setCollectionContent(config.collection);
-        })();
+        const config = configurationImporter.loadConfig(ConfigType.CONTENT);
+        setMetadata(config.metadata);
+        setCollection(config.collection);
     }, []);
 
     return (
-        <ContentContext.Provider value={{ metadata, collectionContent }}>
+        <ContentContext.Provider value={{ metadata, collection }}>
             {children}
         </ContentContext.Provider>
     );

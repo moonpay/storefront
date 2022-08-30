@@ -1,4 +1,5 @@
-import { IToken, ITokenMetadata, ITokenAllocation } from './IToken';
+import { ethers } from 'ethers';
+import { IToken, ITokenMetadata, ITokenAllocationBreakdown } from './IToken';
 import { ITransaction, TransactionStatus } from './ITransaction';
 
 export enum NFTContractMetadataType {
@@ -7,6 +8,10 @@ export enum NFTContractMetadataType {
     URL = 'URL'
 }
 
+interface INFTContractWhitelist {
+    startDate?: string | null;
+    endDate?: string | null;
+}
 export interface INFTContract {
     name: string;
     symbol: string;
@@ -15,6 +20,7 @@ export interface INFTContract {
     saleClosesAt?: Date;
     erc721Price?: number;
     erc721MaxPerTransaction?: number;
+    whitelists: INFTContractWhitelist[];
     metadata: {
         type: NFTContractMetadataType;
         contractUrl?: string;
@@ -24,15 +30,17 @@ export interface INFTContract {
 
 export interface IHyperMintContract {
     connect: () => void;
+    disconnect: () => void;
     getContractInformation: () => Promise<INFTContract>;
     getTokenBalance: () => Promise<number>;
     getTokens: () => Promise<IToken[]>;
     getToken: (tokenId: number) => Promise<IToken>;
-    getTokenAllocation: (tokenId: string, walletAddress: string) => Promise<ITokenAllocation>;
+    getTokenAllocation: (tokenId: string, walletAddress: string) => Promise<ITokenAllocationBreakdown[]>;
     getTokenMetadataUrl: (tokenId: number) => Promise<string>;
     getTokenMetadata: (tokenId: number) => Promise<ITokenMetadata>;
     getTransactionStatus: (transaction: ITransaction) => Promise<TransactionStatus>;
     getWalletBalance: () => Promise<number>;
+    getWalletAddress: () => Promise<string>;
     isWalletValid: () => Promise<boolean>;
     waitForTransaction: (transaction: ITransaction) => Promise<TransactionStatus>;
     buy: (amount: number, tokenId?: number, wait?: boolean) => Promise<ITransaction>;

@@ -4,7 +4,7 @@
     "contractType": "ERC721",
     "networkEnvironment": "Emulator",
     "networkType": "Ethereum",
-    "networkChain": "EVMLocal",
+    "networkChain": "Goerli",
     "enableLogging": true,
     "hmURL": "http://localhost:4001/v1"
 }

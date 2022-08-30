@@ -4,7 +4,7 @@ import { IMetadataContent, ICollectionContent } from './../config/IContentConfig
 
 export interface IContentContext {
     metadata?: IMetadataContent;
-    collectionContent?: ICollectionContent;
+    collection?: ICollectionContent;
 }
 
 export interface IContentProvider extends IComponentWithChildren {

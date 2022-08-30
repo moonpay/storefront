@@ -1,0 +1,26 @@
+.heading {
+    color: var(--color-white);
+    margin-top: var(--spacing-xxsmall);
+}
+
+.subHeading {
+    color: var(--color-white);
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+.description {
+    color: var(--color-white);
+    line-height: 1.6;
+}
+
+.expander {
+    appearance: none;
+    background-color: transparent;
+    border: 0;
+    color: var(--color-white);
+    cursor: pointer;
+    display: block;
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--spacing-large);
+}

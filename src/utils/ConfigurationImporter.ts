@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { IContentConfig } from '../types/config/IContentConfig';
 import { IThemeConfig } from '../types/config/IThemeConfig';
 import { IContractConfig } from '../types/config/IContractConfig';
@@ -10,14 +11,14 @@ export default class ConfigurationImporter {
         [ConfigType.THEME]: 'theme.json',
     };
 
-    public async loadConfig(type: ConfigType.CONTENT): Promise<IContentConfig>;
-    public async loadConfig(type: ConfigType.CONTRACT): Promise<IContractConfig>;
-    public async loadConfig(type: ConfigType.THEME): Promise<IThemeConfig>;
-    public async loadConfig(type: ConfigType) {
+    public loadConfig(type: ConfigType.CONTENT): IContentConfig;
+    public loadConfig(type: ConfigType.CONTRACT): IContractConfig;
+    public loadConfig(type: ConfigType.THEME): IThemeConfig;
+    public loadConfig(type: ConfigType) {
         const fileName = this.getFilenameFromType(type);
-        const configImport = await import(`../config/${fileName}`);
+        const configImport = require(`../config/${fileName}`);
 
-        return configImport.default;
+        return configImport;
     }
 
     private getFilenameFromType(type: ConfigType): string {
