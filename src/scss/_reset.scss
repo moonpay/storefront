@@ -1,5 +1,5 @@
 body {
-    background-color: var(--color-black);
+    background-color: rgb(var(--color-black));
     font-family: var(--font-family-primary);
 }
 
@@ -31,4 +31,18 @@ h3 {
     font-family: Luna-Expanded;
     font-weight: var(--font-weight-medium);
     line-height: 20px;
+}
+
+// Enforce full page layout from the root
+
+html,
+body,
+#root {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+html {
+    min-height: 100vh;
 }

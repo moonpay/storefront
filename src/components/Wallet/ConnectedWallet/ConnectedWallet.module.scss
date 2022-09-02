@@ -18,7 +18,7 @@
     align-items: center;
     background-color: rgba(var(--color-state-error));
     border-radius: var(--border-radius-regular);
-    color: var(--color-black);
+    color: rgb(var(--color-black));
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -37,14 +37,14 @@
 }
 
 .connectedWalletMeta {
-    color: var(--color-white);
+    color: rgb(var(--color-white));
     margin: 0 var(--spacing-xxsmall);
     padding-right: var(--spacing-xsmall);
     line-height: 1;
 }
 
 .withSpacer {
-    border-right: 1px solid var(--color-white);
+    border-right: 1px solid rgb(var(--color-white));
 }
 
 .wrapperButton {

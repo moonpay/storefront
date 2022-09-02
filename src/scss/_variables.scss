@@ -1,10 +1,11 @@
 :root {
     // Colors
-    --color-white: #ffffff;
-    --color-black: #000000;
+    --color-white: 255, 255, 255;
+    --color-black: 0, 0, 0;
     --color-primary: 22, 230, 181;
     --color-grey-light: 237, 237, 239;
     --color-state-error: 243, 174, 165;
+    --color-state-success: 22, 230, 181;
 
     // Borders
     --border-radius-regular: 8px;

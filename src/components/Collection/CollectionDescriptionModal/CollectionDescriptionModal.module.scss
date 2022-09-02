@@ -34,7 +34,7 @@
     transform: scale(0.9);
     visibility: hidden;
     transition: all .3s ease-in-out;
-    background-color: var(--color-white);
+    background-color: rgb(var(--color-white));
     border-radius: var(--border-radius-regular);
     padding: var(--spacing-regular) var(--spacing-xlarge);
     max-width: 600px;

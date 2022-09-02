@@ -1,5 +1,5 @@
 .card {
-    background-color: var(--color-white);
+    background-color: rgb(var(--color-white));
     padding: var(--spacing-xxlarge);
     border-radius: var(--border-radius-regular);
 }
@@ -9,7 +9,7 @@
 }
 
 .cardContent {
-    color: var(--color-black);
+    color: rgb(var(--color-black));
 }
 
 .cardHeader {

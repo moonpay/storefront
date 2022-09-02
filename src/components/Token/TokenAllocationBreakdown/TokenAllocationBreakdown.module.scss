@@ -5,7 +5,7 @@
 .toggle {
     background-color: rgba(246, 246, 247, 0.12);
     border-radius: var(--border-radius-regular);
-    color: var(--color-white);
+    color: rgb(var(--color-white));
     padding: var(--spacing-xsmall) var(--spacing-small);
     position: relative;
 }
