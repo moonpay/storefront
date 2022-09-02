@@ -1,19 +1,13 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { ContractContext } from '../../../../context/ContractContext';
 import { WalletContext } from '../../../../context/WalletContext';
 import ConnectWalletButton from '../../../Wallet/ConnectWalletButton';
 import styles from './PrivateSaleCard.module.scss';
 
 const PrivateSaleCard: FC = () => {
-    const walletContext = useContext(WalletContext);
+    const { connectedWallet, isConnected } = useContext(WalletContext);
     const contractContext = useContext(ContractContext);
     const [isOnEarlyAccessList, setIsOnEarlyAccessList] = useState(false);
-    const { isConnected, address } = useAccount({
-        onConnect: async ({ address }) => {
-            await getWalletAllocation(address);
-        }
-    });
 
     const canAccessPrivateSale = useMemo(() => isConnected && isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
     const cantAccessPrivateSale = useMemo(() => isConnected && !isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
@@ -38,10 +32,10 @@ const PrivateSaleCard: FC = () => {
     };
 
     useEffect(() => {
-        if (isConnected && address) {
-            getWalletAllocation(address);
+        if (isConnected && connectedWallet?.address) {
+            getWalletAllocation(connectedWallet.address);
         }
-    }, [isConnected, address]);
+    }, [isConnected, connectedWallet?.address]);
 
     // This is where we show the purchase flow
     if (canAccessPrivateSale) return null;
@@ -51,7 +45,7 @@ const PrivateSaleCard: FC = () => {
             <article className={styles.card}>
                 <div className={styles.cardContentBlock}>
                     <h2 className={`${styles.cardContent} ${styles.cardHeader}`}>Oops that wallet is not on the access list</h2>
-                    <p className={styles.cardContent}>Wallet {walletContext?.connectedWallet?.formattedAddress} does not appear to be on the access list for early access. Check back during the public sale or disconnect to try again.</p>
+                    <p className={styles.cardContent}>Wallet {connectedWallet?.formattedAddress} does not appear to be on the access list for early access. Check back during the public sale or disconnect to try again.</p>
                 </div>
 
                 <ConnectWalletButton canAccessPrivateSale={isOnEarlyAccessList} />

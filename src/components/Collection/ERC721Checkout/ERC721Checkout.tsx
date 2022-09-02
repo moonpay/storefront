@@ -1,84 +1,76 @@
-import { FC, useContext, useMemo, useState } from 'react';
-import Container from '../../Layout/Container';
+import { FC, useContext, useEffect, useState } from 'react';
 import TokenCard from '../../Token/TokenCard';
-import CollectionDetails from '../CollectionDetails';
 import mysteryTokenImage from '../../../assets/token.png';
 import SaleCard from '../../SaleCard';
 import { WalletContext } from '../../../context/WalletContext';
 import { ContractContext } from '../../../context/ContractContext';
+import { NFTContractType } from '../../../types/HyperMint/IContract';
 import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
 import styles from './ERC721Checkout.module.scss';
 
 interface IERC721Checkout {
-    token?: any;
+    token?: any; // TODO: add token types
+    publicSaleLive: boolean;
+    privateSaleLive: boolean;
 }
 
-const ERC721Checkout: FC<IERC721Checkout> = ({ token }) => {
+const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, privateSaleLive }) => {
     const { hyperMintContract } = useContext(ContractContext);
-    const { connectedWallet } = useContext(WalletContext);
+    const { connectedWallet, isConnected } = useContext(WalletContext);
+    const [canPurchase, setCanPurchase] = useState(false);
     const [allocation, setAllocation] = useState<ITokenAllocationBreakdown[]>();
-    const canPurchase = useMemo(() => {
-        if (!connectedWallet) return false;
 
-        (async () => {
-            await setTimeout(async () => {
-                await getWalletAllocation(connectedWallet.address);
-            }, 1000);
-        })();
-
-        return true;
-    }, [connectedWallet, hyperMintContract]);
-
-    const getWalletAllocation = async (walletAddress?: string) => {
+    const getWalletAllocation = async (walletAddress?: string): Promise<ITokenAllocationBreakdown[]> => {
         if (!walletAddress) {
-            return;
+            return [];
         }
 
-        const tokenAllocation = await hyperMintContract?.getTokenAllocation('0', walletAddress)
+        const walletAllocation = await hyperMintContract?.getTokenAllocation('0', walletAddress)
             .catch(() => {
                 setAllocation(undefined);
+                return [];
             });
 
-        if (tokenAllocation?.length) {
-            setAllocation(tokenAllocation);
-        }
+        setAllocation(walletAllocation);
+
+        return walletAllocation;
     };
 
+    useEffect(() => {
+        if (publicSaleLive) {
+            setCanPurchase(true);
+        } else if (!isConnected) {
+            setCanPurchase(false);
+        } else {
+            (async () => {
+                const walletAllocation = await getWalletAllocation(connectedWallet?.address);
 
-    // if public sale open then anyone can purchase
-    // if private sale open, get the allocation and then we can see if they are able to purchase
+                return setCanPurchase(walletAllocation.length > 0);
+            })();
+        }
+    }, [publicSaleLive, isConnected]);
+
+    if (!canPurchase) {
+        return (
+            <SaleCard
+                privateSaleLive={privateSaleLive}
+            />
+        );
+    }
 
     return (
-        <main className={styles.main}>
-            <Container narrow>
-                <div className={styles.layout}>
-                    <CollectionDetails
-                        privateSaleLive={true}
-                        isPurchasing={canPurchase}
-                    />
-
-                    {canPurchase ? (
-                        <TokenCard
-                            token={{
-                                id: token?.id,
-                                name: 'Mystery Token',
-                                image: {
-                                    url: mysteryTokenImage
-                                },
-                            }}
-                            allocation={allocation}
-                            canPurchase
-                        />
-                    ) : (
-                        <SaleCard
-                            privateSaleLive={true}
-                        />
-                    )}
-
-                    {/* If its 1155 - show grid */}
-                </div>
-            </Container>
-        </main>
+        <div className={styles.limiter}>
+            <TokenCard
+                token={{
+                    id: token?.id,
+                    name: 'Mystery Token',
+                    image: mysteryTokenImage,
+                    type: NFTContractType.ERC721
+                }}
+                publicSaleLive={publicSaleLive}
+                allocation={allocation}
+            />
+        </div>
     );
 };
 

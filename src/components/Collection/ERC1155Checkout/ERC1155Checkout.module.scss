@@ -1,0 +1,21 @@
+.hero {
+    flex-grow: 1;
+
+    @media screen and (min-width: 1024px) {
+        max-width: 50%;
+    }
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacing-xxlarge);
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

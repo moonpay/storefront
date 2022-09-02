@@ -1,32 +1,25 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { createContext, FC, useEffect, useState } from 'react';
-// import { useSigner } from 'wagmi';
+import { createContext, FC, useEffect, useMemo, useState } from 'react';
 import { ConfigType } from '../types/Config';
 import { IContractContext, IContractProvider } from '../types/context/IContractContext';
 import { IHyperMintContract, INFTContract } from '../types/HyperMint/IContract';
+import ConfigurationImporter from '../utils/ConfigurationImporter';
 
 // @ts-ignore
 const { Contract } = HyperMint;
 
 export const ContractContext = createContext<IContractContext>({} as IContractContext);
 
-export const ContractProvider: FC<IContractProvider> = ({ children, configurationImporter }) => {
-    const [hyperMintContract, setHyperMintContract] = useState<IHyperMintContract>();
+const contractConfig = (new ConfigurationImporter()).loadConfig(ConfigType.CONTRACT);
+export const ContractProvider: FC<IContractProvider> = ({ children }) => {
     const [nftContract, setNftContract] = useState<INFTContract>();
-    // const { data: signer } = useSigner();
-
-    useEffect(() => {
-        const config = configurationImporter.loadConfig(ConfigType.CONTRACT);
-        const contract: IHyperMintContract = new Contract(config);
-        // contract.connect(signer);
-
-        setHyperMintContract(contract);
+    const hyperMintContract = useMemo<IHyperMintContract>(() => {
+        return new Contract(contractConfig);
     }, []);
 
     useEffect(() => {
-        if (!hyperMintContract) return;
-
         (async () => {
+            // TODO: need to handle a non deployed contract error here
             const contractInfo = await hyperMintContract.getContractInformation();
 
             setNftContract(contractInfo);

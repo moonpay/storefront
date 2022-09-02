@@ -1,28 +1,24 @@
 import { FC, useContext, useMemo, useState } from 'react';
 import { ContentContext } from '../../../context/ContentContext';
+import Container from '../../Layout/Container';
 import CollectionDescriptionModal from '../CollectionDescriptionModal';
 import styles from './CollectionDetails.module.scss';
 
-interface ICollectionDetails {
-    privateSaleLive?: boolean;
-    isPurchasing?: boolean;
-}
-
-const CollectionDetails: FC<ICollectionDetails> = ({ privateSaleLive, isPurchasing }) => {
+const CollectionDetails: FC = () => {
     const contentContext = useContext(ContentContext);
     const [showContentModal, setShowContentModal] = useState(false);
 
     const truncatedContent = useMemo(() => {
-        if (!contentContext.collection?.description) return null;
+        if (!contentContext?.description) return null;
 
-        return `${contentContext.collection.description.slice(0, 200)}...`;
-    }, [contentContext.collection?.description]);
+        return `${contentContext.description.slice(0, 200)}...`;
+    }, [contentContext?.description]);
 
     return (
         <>
-            <section className={styles.hero}>
+            <section className={styles.wrapper}>
                 <h3 className={styles.subHeading}>Bored Ape Yacht Club Presents</h3>
-                <h1 className={styles.heading}>{contentContext.collection?.title}</h1>
+                <h1 className={styles.heading}>{contentContext?.title}</h1>
                 <p className={styles.description}>{truncatedContent}</p>
 
                 <button
@@ -35,7 +31,7 @@ const CollectionDetails: FC<ICollectionDetails> = ({ privateSaleLive, isPurchasi
 
             <CollectionDescriptionModal
                 isOpen={showContentModal}
-                description={contentContext?.collection?.description}
+                description={contentContext?.description}
                 onClose={() => setShowContentModal(false)}
             />
         </>

@@ -1,22 +1,20 @@
 .wrapper {
-    min-height: 100vh;
-    width: 100vw;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    min-height: 100vh;
+    width: 100vw;
 }
 
-.background {
+.hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: -1;
+    position: relative;
 
     &::before {
         background: linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0) 100%);
@@ -27,4 +25,36 @@
         right: 0;
         top: 0;
     }
+
+    @media screen and (min-width: 1024px) {
+        justify-content: center;
+    }
+}
+
+.erc1155Hero {
+    max-height: 1200px;
+    min-height: 750px;
+}
+
+.heroGrid {
+    align-items: center;
+    display: grid;
+    gap: var(--spacing-xxlarge);
+    position: relative;
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1280px) {
+        gap: calc(var(--spacing-xxlarge) * 5);
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.main {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    margin-top: -150px;
 }

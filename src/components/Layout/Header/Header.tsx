@@ -1,8 +1,9 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useMemo } from 'react';
 import { ContractContext } from '../../../context/ContractContext';
 import Countdown from '../../Countdown';
 import logo from '../../../assets/logo.png';
 import ConnectedWallet from '../../Wallet/ConnectedWallet';
+import { NFTContractType } from '../../../types/HyperMint/IContract';
 import styles from './Header.module.scss';
 
 interface IHeader {
@@ -15,6 +16,12 @@ interface IHeader {
 
 const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, setPublicSaleLive, setPrivateSaleLive }) => {
     const { nftContract } = useContext(ContractContext);
+
+    const shouldShowPrivateSaleCounter = useMemo(() => {
+        if (nftContract?.network.contractType === NFTContractType.ERC1155) return false;
+
+        return !publicSaleLive && !!privateSaleDate;
+    }, [publicSaleLive, privateSaleDate, privateSaleLive, nftContract?.network]);
 
     return (
         <header className={styles.header}>
@@ -38,7 +45,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
                             />
                         </div>
 
-                        {(!publicSaleLive && !!privateSaleDate) && (
+                        {shouldShowPrivateSaleCounter && (
                             <div className={`${styles.countdown} ${privateSaleLive && styles.countdownLive}`}>
                                 <p className={styles.countdownTitle}>Private Sale &nbsp;</p>
                                 <Countdown

@@ -1,0 +1,1 @@
+export { default } from './ERC1155Checkout';

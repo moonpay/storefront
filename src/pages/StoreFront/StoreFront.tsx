@@ -1,47 +1,18 @@
 /* eslint-disable import/no-unresolved */
 import { FC, useContext, useEffect, useState } from 'react';
-import {
-    darkTheme,
-    getDefaultWallets,
-    RainbowKitProvider,
-} from '@rainbow-me/rainbowkit';
-import {
-    chain,
-    configureChains,
-    createClient,
-    WagmiConfig,
-} from 'wagmi';
-import { publicProvider } from 'wagmi/providers/public';
+import { Toaster } from 'react-hot-toast';
 import Footer from '../../components/Layout/Footer';
 import Header from '../../components/Layout/Header';
 import { ContractContext } from '../../context/ContractContext';
 import { ThemeContext } from '../../context/ThemeContext';
-import { WalletProvider } from '../../context/WalletContext';
 import ERC721Checkout from '../../components/Collection/ERC721Checkout';
 import { IToken } from '../../types/HyperMint/IToken';
+import ERC1155Checkout from '../../components/Collection/ERC1155Checkout';
+import Container from '../../components/Layout/Container';
+import CollectionDetails from '../../components/Collection/CollectionDetails';
+import { NFTContractType } from '../../types/HyperMint/IContract';
 import styles from './StoreFront.module.scss';
-import '@rainbow-me/rainbowkit/styles.css';
 
-const { chains, provider } = configureChains(
-    [chain.localhost], // might be able to configure this to JUST use the contract selected chain
-    [
-        publicProvider()
-    ]
-);
-
-const { connectors } = getDefaultWallets({
-    appName: 'My RainbowKit App',
-    chains
-});
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider
-});
-
-{/* Show sale card if the user is not able to purchase (not on whitelist or whitelist is closed) */}
-{/* Show token card if the user is purchasing (on whitelist and 721) and contract is 721 */}
 const StoreFront: FC = () => {
     const { nftContract, hyperMintContract } = useContext(ContractContext);
     const themeContext = useContext(ThemeContext);
@@ -98,38 +69,53 @@ const StoreFront: FC = () => {
     }, [nftContract]);
 
     return (
-        <WagmiConfig client={wagmiClient}>
-            <RainbowKitProvider chains={chains} modalSize="compact" theme={darkTheme()}>
-                <WalletProvider>
-                    <div
-                        className={styles.background}
-                        style={{ backgroundImage: `url(${themeContext.images?.background?.src})` }}
-                    />
+        <>
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
 
-                    <section
-                        className={styles.wrapper}
-                    >
-                        <Header
-                            publicSaleLive={publicSaleLive}
-                            privateSaleLive={privateSaleLive}
-                            privateSaleDate={privateSaleDate}
-                            setPublicSaleLive={setPublicSaleLive}
-                            setPrivateSaleLive={setPrivateSaleLive}
-                        />
+            <div
+                className={`${styles.hero} ${nftContract?.network.contractType === NFTContractType.ERC1155 && styles.erc1155Hero}`}
+                style={{ backgroundImage: `url(${themeContext.images?.background?.src})` }}
+            >
+                <Header
+                    publicSaleLive={publicSaleLive}
+                    privateSaleLive={privateSaleLive}
+                    privateSaleDate={privateSaleDate}
+                    setPublicSaleLive={setPublicSaleLive}
+                    setPrivateSaleLive={setPrivateSaleLive}
+                />
 
-                        {nftContract?.erc721Price ? (
+
+                <Container>
+                    <div className={styles.heroGrid}>
+                        <CollectionDetails />
+
+                        {nftContract?.network.contractType === NFTContractType.ERC721 && (
                             <ERC721Checkout
                                 token={contractTokens ? contractTokens[0] : undefined}
+                                publicSaleLive={publicSaleLive}
+                                privateSaleLive={privateSaleLive}
                             />
-                        ) : (
-                            <h1>Hello world</h1>
                         )}
+                    </div>
+                </Container>
+            </div>
 
-                        <Footer />
-                    </section>
-                </WalletProvider>
-            </RainbowKitProvider>
-        </WagmiConfig>
+            {nftContract?.network.contractType === NFTContractType.ERC1155 && (
+                <main className={styles.main}>
+                    <Container narrow>
+                        <ERC1155Checkout
+                            tokens={contractTokens ?? []}
+                            publicSaleLive={publicSaleLive}
+                        />
+                    </Container>
+                </main>
+            )}
+
+            <Footer />
+        </>
     );
 };
 

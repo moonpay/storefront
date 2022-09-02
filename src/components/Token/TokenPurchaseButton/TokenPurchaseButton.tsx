@@ -1,18 +1,21 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent, useContext } from 'react';
+import { ContractContext } from '../../../context/ContractContext';
 import styles from './TokenPurchaseButton.module.scss';
 
 interface ITokenPurchaseButton {
     total: string;
-    onClick: () => void;
+    onPurchase?: (event: SyntheticEvent) => void;
+    purchasing?: boolean;
 }
 
-const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onClick }) => {
+const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onPurchase, purchasing }) => {
     return (
         <button
             className={styles.button}
-            onClick={onClick}
+            onClick={onPurchase}
+            disabled={purchasing}
         >
-            {total} | Buy
+            {purchasing ? 'Processing...' : `${total} | Buy`}
         </button>
     );
 };

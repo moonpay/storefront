@@ -9,72 +9,78 @@ interface ITokenAllocationBreakdown {
     allocation?: IApiTokenAllocationBreakdown[];
 }
 
-const TokenAllocationBreakdown: FC<ITokenAllocationBreakdown> = ({ allocation, showBreakdown, setShowBreakdown }) => (
-    <div className={styles.wrap}>
-        <div
-            className={`${styles.toggle} ${showBreakdown && styles.toggleActive}`}
-            onClick={() => setShowBreakdown(!showBreakdown)}
-        >
-            <div className={styles.toggleHeader}>
-                <p>Token Allocation</p>
-                <img
-                    src={require('../../../assets/icons/down.png')}
-                    className={showBreakdown ? styles.toggleIconActive : styles.toggleIconInactive}
-                />
-            </div>
+const TokenAllocationBreakdown: FC<ITokenAllocationBreakdown> = ({ allocation, showBreakdown, setShowBreakdown }) => {
+    if (!allocation?.length) {
+        return null;
+    }
 
-            {showBreakdown && (
-                <div className={styles.breakdown}>
-                    {
-                        (() => {
-                            let currentUpperBound = 0;
-                            let currentLowerBound = 0;
+    return (
+        <div className={styles.wrap}>
+            <div
+                className={`${styles.toggle} ${showBreakdown && styles.toggleActive}`}
+                onClick={() => setShowBreakdown(!showBreakdown)}
+            >
+                <div className={styles.toggleHeader}>
+                    <p>Token Allocation</p>
+                    <img
+                        src={require('../../../assets/icons/down.png')}
+                        className={showBreakdown ? styles.toggleIconActive : styles.toggleIconInactive}
+                    />
+                </div>
 
-                            return allocation?.map((allocation, key) => {
-                                currentLowerBound = currentUpperBound > 0 ? currentUpperBound + 1 : 1;
-                                currentUpperBound = allocation.remainingAllocation ? currentUpperBound + allocation.remainingAllocation : -1;
+                {showBreakdown && (
+                    <div className={styles.breakdown}>
+                        {
+                            (() => {
+                                let currentUpperBound = 0;
+                                let currentLowerBound = 0;
 
-                                const isOneAllocation = currentLowerBound === currentUpperBound;
-                                const isDoubleAllocation = currentLowerBound + 1 === currentUpperBound;
+                                return allocation?.map((allocation, key) => {
+                                    currentLowerBound = currentUpperBound > 0 ? currentUpperBound + 1 : 1;
+                                    currentUpperBound = allocation.remainingAllocation ? currentUpperBound + allocation.remainingAllocation : -1;
 
-                                const allocationCount = (() => {
-                                    if (isOneAllocation) {
+                                    const isOneAllocation = currentLowerBound === currentUpperBound;
+                                    const isDoubleAllocation = currentLowerBound + 1 === currentUpperBound;
+
+                                    const allocationCount = (() => {
+                                        if (isOneAllocation) {
+                                            return (
+                                                <p>{numberToWords.toOrdinal(currentLowerBound)}</p>
+                                            );
+                                        }
+
+                                        if (isDoubleAllocation) {
+                                            return (
+                                                <p>{numberToWords.toOrdinal(currentLowerBound)} & {numberToWords.toOrdinal(currentUpperBound)}</p>
+                                            );
+                                        }
+
+                                        if (currentUpperBound < 0) {
+                                            return (
+                                                <p>{numberToWords.toOrdinal(currentLowerBound)}+</p>
+                                            );
+                                        }
+
                                         return (
-                                            <p>{numberToWords.toOrdinal(currentLowerBound)}</p>
+                                            <p>{numberToWords.toOrdinal(currentLowerBound)} - {numberToWords.toOrdinal(currentUpperBound)}</p>
                                         );
-                                    }
-
-                                    if (isDoubleAllocation) {
-                                        return (
-                                            <p>{numberToWords.toOrdinal(currentLowerBound)} & {numberToWords.toOrdinal(currentUpperBound)}</p>
-                                        );
-                                    }
-
-                                    if (currentUpperBound < 0) {
-                                        return (
-                                            <p>{numberToWords.toOrdinal(currentLowerBound)}+</p>
-                                        );
-                                    }
+                                    })();
 
                                     return (
-                                        <p>{numberToWords.toOrdinal(currentLowerBound)} - {numberToWords.toOrdinal(currentUpperBound)}</p>
+                                        <div className={styles.allocationItem} key={`allocation-${key}`}>
+                                            {allocationCount}
+                                            <p>{allocation.pricePerToken ? `${allocation.pricePerToken} ETH/ea` : 'Free'}</p>
+                                        </div>
                                     );
-                                })();
+                                });
+                            })()
+                        }
+                    </div>
+                )}
+            </div>
 
-                                return (
-                                    <div className={styles.allocationItem} key={`allocation-${key}`}>
-                                        {allocationCount}
-                                        <p>{allocation.pricePerToken ? `${allocation.pricePerToken} ETH/ea` : 'Free'}</p>
-                                    </div>
-                                );
-                            });
-                        })()
-                    }
-                </div>
-            )}
         </div>
-
-    </div>
-);
+    );
+};
 
 export default TokenAllocationBreakdown;
