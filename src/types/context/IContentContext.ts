@@ -1,11 +1,8 @@
 import ConfigurationImporter from '../../utils/ConfigurationImporter';
 import { IComponentWithChildren } from '../IComponentWithChildren';
-import { IMetadataContent, ICollectionContent } from './../config/IContentConfig';
+import { ICollectionContent } from './../config/IContentConfig';
 
-export interface IContentContext {
-    metadata?: IMetadataContent;
-    collection?: ICollectionContent;
-}
+export type IContentContext = ICollectionContent | undefined;
 
 export interface IContentProvider extends IComponentWithChildren {
     configurationImporter: ConfigurationImporter;

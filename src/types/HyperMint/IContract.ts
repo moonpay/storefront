@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { IWalletProvider } from '../context/IWalletContext';
 import { IToken, ITokenMetadata, ITokenAllocationBreakdown } from './IToken';
 import { ITransaction, TransactionStatus } from './ITransaction';
 
@@ -8,6 +9,34 @@ export enum NFTContractMetadataType {
     URL = 'URL'
 }
 
+export enum NFTContractType {
+    ERC721 = 'ERC721',
+    ERC1155 = 'ERC1155'
+}
+
+export enum NetworkType {
+    ETHEREUM = 'ETHEREUM',
+    POLYGON = 'POLYGON',
+    SOLANA = 'SOLANA'
+}
+
+export enum NetworkEnvironment {
+    EMULATOR = 'EMULATOR',
+    TESTNET = 'TESTNET',
+    MAINNET = 'MAINNET'
+}
+
+export enum NetworkChain {
+    EVMLocal = 1337,
+    ETHEREUM = 1,
+    Ropsten = 3,
+    Rinkeby = 4,
+    Goerli = 5,
+    POLYGON = 137,
+    Mumbai = 80001
+}
+
+
 interface INFTContractWhitelist {
     startDate?: string | null;
     endDate?: string | null;
@@ -16,6 +45,7 @@ export interface INFTContract {
     name: string;
     symbol: string;
     allowBuyOnNetwork: boolean;
+    allowBuyWithMoonPay: boolean;
     publicSaleAt?: Date;
     saleClosesAt?: Date;
     erc721Price?: number;
@@ -26,10 +56,25 @@ export interface INFTContract {
         contractUrl?: string;
         tokenUrl?: string;
     };
+    // TODO: add better types here
+    network: {
+        chainId: number;
+        contractAddress: string;
+        contractType: 'ERC721' | 'ERC1155';
+        environment: string;
+        type: string;
+    }
 }
 
 export interface IHyperMintContract {
-    connect: () => void;
+    signer?: ethers.Signer | null;
+
+    // TODO: temp
+    getTotalMinted: (tokenId: number) => Promise<number>;
+    getConnectedWallet: () => Promise<any>; // TODO: add type
+
+    openWalletConnector: () => Promise<IWalletProvider>;
+    connect: () => Promise<void>;
     disconnect: () => void;
     getContractInformation: () => Promise<INFTContract>;
     getTokenBalance: () => Promise<number>;

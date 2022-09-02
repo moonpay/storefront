@@ -6,9 +6,9 @@ import { ConfigType } from './../types/Config';
 
 export default class ConfigurationImporter {
     private readonly typeMap = {
-        [ConfigType.CONTENT]: 'content.json',
-        [ConfigType.CONTRACT]: 'contract.json',
-        [ConfigType.THEME]: 'theme.json',
+        [ConfigType.CONTENT]: 'content',
+        [ConfigType.CONTRACT]: 'contract',
+        [ConfigType.THEME]: 'theme',
     };
 
     public loadConfig(type: ConfigType.CONTENT): IContentConfig;
@@ -16,7 +16,7 @@ export default class ConfigurationImporter {
     public loadConfig(type: ConfigType.THEME): IThemeConfig;
     public loadConfig(type: ConfigType) {
         const fileName = this.getFilenameFromType(type);
-        const configImport = require(`../config/${fileName}`);
+        const configImport = require(`../config/${fileName}`).default;
 
         return configImport;
     }

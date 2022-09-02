@@ -3,7 +3,7 @@ import { IComponentWithChildren } from '../IComponentWithChildren';
 import { IHyperMintContract, INFTContract } from './../HyperMint/IContract';
 
 export interface IContractContext {
-    hyperMintContract?: IHyperMintContract;
+    hyperMintContract: IHyperMintContract;
     nftContract?: INFTContract;
 }
 
