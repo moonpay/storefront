@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { IWalletProvider } from '../context/IWalletContext';
+import { IWallet } from './IWallet';
 import { IToken, ITokenMetadata, ITokenAllocationBreakdown } from './IToken';
 import { ITransaction, TransactionStatus } from './ITransaction';
 
@@ -36,7 +37,6 @@ export enum NetworkChain {
     Mumbai = 80001
 }
 
-
 interface INFTContractWhitelist {
     startDate?: string | null;
     endDate?: string | null;
@@ -71,7 +71,7 @@ export interface IHyperMintContract {
 
     // TODO: temp
     getTotalMinted: (tokenId: number) => Promise<number>;
-    getConnectedWallet: () => Promise<any>; // TODO: add type
+    getConnectedWallet: () => Promise<IWallet>;
 
     openWalletConnector: () => Promise<IWalletProvider>;
     connect: () => Promise<void>;

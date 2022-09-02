@@ -2,7 +2,6 @@ import { IComponentWithChildren } from '../IComponentWithChildren';
 
 export interface IConnectedWallet {
     address: string;
-    balance: number;
     formattedAddress: string;
     formattedBalance: string;
 }

@@ -5,9 +5,18 @@ interface ITokenPurchaseButton {
     total: string;
     onPurchase?: (event: SyntheticEvent) => void;
     purchasing?: boolean;
+    soldOut?: boolean;
 }
 
-const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onPurchase, purchasing }) => {
+const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onPurchase, purchasing, soldOut }) => {
+    if (soldOut) {
+        return (
+            <button className={`${styles.button} ${styles.soldOutButton}`} disabled>
+                Sold Out
+            </button>
+        );
+    }
+
     return (
         <button
             className={styles.button}

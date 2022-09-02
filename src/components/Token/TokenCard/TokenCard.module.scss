@@ -58,6 +58,11 @@
     color: rgb(var(--color-white));
     flex-grow: 1;
     padding: var(--spacing-regular) var(--spacing-small);
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 .inputHeader {

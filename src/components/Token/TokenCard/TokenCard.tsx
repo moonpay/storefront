@@ -8,6 +8,7 @@ import TokenPurchaseButton from '../TokenPurchaseButton/TokenPurchaseButton';
 import { WalletContext } from '../../../context/WalletContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
 import Modal from '../../Common/Modal';
+import { ContentContext } from '../../../context/ContentContext';
 import styles from './TokenCard.module.scss';
 
 interface ITokenCard {
@@ -27,6 +28,7 @@ interface ITokenCard {
 }
 
 const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSuccessfulPurchase }) => {
+    const content = useContext(ContentContext);
     const { nftContract, hyperMintContract } = useContext(ContractContext);
     const { connectedWallet } = useContext(WalletContext);
     const [quantity, setQuantity] = useState(1);
@@ -142,6 +144,10 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         }
     };
 
+    if (token?.remaining === 0 && content?.hideSoldOutTokens) {
+        return null;
+    }
+
     return (
         <>
             <Modal
@@ -175,7 +181,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                             className={styles.image}
                         />
 
-                        {token.remaining && (
+                        {token.remaining !== undefined && (
                             <div className={styles.remainingCounter}>
                                 <p>{token.remaining} left</p>
                             </div>
@@ -210,6 +216,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                             onChange={e => setQuantity(Number(e.target.value))}
                                             min={1}
                                             max={maxAllocation > 0 ? maxAllocation : undefined}
+                                            disabled={token.remaining === 0}
                                         />
                                     </div>
                                 </div>
@@ -218,6 +225,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                     total={EthereumWalletHelpers.formatBalance(totalCost.toString(), 'ETH')}
                                     onPurchase={onPurchase}
                                     purchasing={purchasing}
+                                    soldOut={token.remaining === 0}
                                 />
                             </form>
                         </div>
