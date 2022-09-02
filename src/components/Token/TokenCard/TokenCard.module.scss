@@ -34,7 +34,6 @@
     right: var(--spacing-small);
 }
 
-// TODO: test different images here
 .image {
     height: 300px;
     object-fit: cover;
@@ -77,4 +76,12 @@
 
 .breakdownShowing {
     opacity: 0;
+}
+
+.infoIcon {
+    cursor: pointer;
+}
+
+.modalHeader {
+    margin-top: 0;
 }

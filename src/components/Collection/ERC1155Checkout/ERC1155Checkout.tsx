@@ -6,13 +6,16 @@ import styles from './ERC1155Checkout.module.scss';
 interface IERC1155Checkout {
     tokens: any[];
     publicSaleLive: boolean;
+    onSuccessfulPurchase: (tokenId: string) => void;
 }
 
-const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive }) => {
+const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive, onSuccessfulPurchase }) => {
     return (
         <section className={styles.grid}>
             {tokens.map((token) => (
                 <TokenCard
+                    onSuccessfulPurchase={onSuccessfulPurchase}
+                    key={`ERC1155-${token.id}`}
                     publicSaleLive={publicSaleLive}
                     token={{
                         ...token,

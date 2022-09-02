@@ -1,5 +1,4 @@
-import { FC, SyntheticEvent, useContext } from 'react';
-import { ContractContext } from '../../../context/ContractContext';
+import { FC, SyntheticEvent } from 'react';
 import styles from './TokenPurchaseButton.module.scss';
 
 interface ITokenPurchaseButton {

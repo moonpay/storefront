@@ -1,6 +1,6 @@
 import { FC, useContext, useMemo } from 'react';
 import { ContractContext } from '../../../context/ContractContext';
-import Countdown from '../../Countdown';
+import Countdown from '../../Common/Countdown';
 import logo from '../../../assets/logo.png';
 import ConnectedWallet from '../../Wallet/ConnectedWallet';
 import { NFTContractType } from '../../../types/HyperMint/IContract';

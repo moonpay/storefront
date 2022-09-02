@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unresolved */
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Footer from '../../components/Layout/Footer';
 import Header from '../../components/Layout/Header';
@@ -21,6 +21,8 @@ const StoreFront: FC = () => {
     const [privateSaleLive, setPrivateSaleLive] = useState(false);
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
     const [contractTokens, setContractTokens] = useState<any[]>();
+
+    const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
 
     const getToken = async (token: IToken): Promise<any> => {
         try {
@@ -89,24 +91,24 @@ const StoreFront: FC = () => {
 
 
                 <Container>
-                    <div className={styles.heroGrid}>
+                    <div className={`${styles.heroGrid} ${contractIsERC721 ? styles.erc721HeroGrid : ''}`}>
                         <CollectionDetails />
 
-                        {nftContract?.network.contractType === NFTContractType.ERC721 && (
+                        {contractIsERC721 && (
                             <ERC721Checkout
                                 token={contractTokens ? contractTokens[0] : undefined}
                                 publicSaleLive={publicSaleLive}
-                                privateSaleLive={privateSaleLive}
                             />
                         )}
                     </div>
                 </Container>
             </div>
 
-            {nftContract?.network.contractType === NFTContractType.ERC1155 && (
+            {!contractIsERC721 && (
                 <main className={styles.main}>
                     <Container narrow>
                         <ERC1155Checkout
+                            onSuccessfulPurchase={getContractTokens}
                             tokens={contractTokens ?? []}
                             publicSaleLive={publicSaleLive}
                         />
@@ -114,7 +116,9 @@ const StoreFront: FC = () => {
                 </main>
             )}
 
-            <Footer />
+            <Footer
+                className={contractIsERC721 ? styles.erc721Footer : ''}
+            />
         </>
     );
 };

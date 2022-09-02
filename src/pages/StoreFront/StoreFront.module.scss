@@ -11,13 +11,15 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    min-height: 850px;
+    flex-grow: 1;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
 
     &::before {
-        background: linear-gradient(to bottom, rgba(0,0,0,1) 10%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0) 100%);
+        background: linear-gradient(to bottom, rgba(var(--color-black),1) 10%, rgba(var(--color-black),0.75) 65%, rgba(var(--color-black),0) 100%);
         bottom: 0;
         content: '';
         left: 0;
@@ -32,6 +34,7 @@
 }
 
 .erc1155Hero {
+    height: 100vh;
     max-height: 1200px;
     min-height: 750px;
 }
@@ -52,9 +55,19 @@
     }
 }
 
+.erc721HeroGrid {
+    padding-bottom: calc(var(--spacing-xxlarge) * 4);
+}
+
+.erc721Footer {
+    --base-negative-margin: calc(var(--spacing-xxlarge) * -1);
+    margin-top: calc(var(--base-negative-margin) * 2);
+}
+
 .main {
     align-items: center;
     display: flex;
     flex-grow: 1;
     margin-top: -150px;
+    margin-bottom: var(--spacing-xxlarge);
 }
