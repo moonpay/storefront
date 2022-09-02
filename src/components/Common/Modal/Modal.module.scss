@@ -1,5 +1,4 @@
 .modalWrapActive {
-    // opacity: 1;
     visibility: visible;
 }
 
@@ -13,13 +12,19 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0,0,0,0.75);
+    background-color: rgba(var(--color-black),0.75);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--spacing-regular);
     opacity: 1;
     z-index: 100000;
+}
+
+.modalClose {
+    position: absolute;
+    top: var(--spacing-large);
+    right: var(--spacing-regular);
 }
 
 .modalHeaderWrap {
@@ -31,18 +36,18 @@
 
 .modal {
     opacity: 0;
-    transform: scale(0.9);
+    transform: translateY(20px);
     visibility: hidden;
     transition: all .3s ease-in-out;
     background-color: rgb(var(--color-white));
     border-radius: var(--border-radius-regular);
-    padding: var(--spacing-regular) var(--spacing-xlarge);
+    padding: var(--spacing-large) var(--spacing-xxlarge);
     max-width: 600px;
 }
 
 .modalActive {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0px);
     visibility: visible;
 }
 

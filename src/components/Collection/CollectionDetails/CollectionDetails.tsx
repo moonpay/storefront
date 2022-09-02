@@ -1,7 +1,6 @@
 import { FC, useContext, useMemo, useState } from 'react';
 import { ContentContext } from '../../../context/ContentContext';
-import Container from '../../Layout/Container';
-import CollectionDescriptionModal from '../CollectionDescriptionModal';
+import Modal from '../../Common/Modal';
 import styles from './CollectionDetails.module.scss';
 
 const CollectionDetails: FC = () => {
@@ -29,10 +28,15 @@ const CollectionDetails: FC = () => {
                 </button>
             </section>
 
-            <CollectionDescriptionModal
+            <Modal
                 isOpen={showContentModal}
-                description={contentContext?.description}
                 onClose={() => setShowContentModal(false)}
+                content={
+                    <div>
+                        <h3 className={styles.modalHeader}>Collection Details</h3>
+                        <p>{contentContext?.description}</p>
+                    </div>
+                }
             />
         </>
     );
