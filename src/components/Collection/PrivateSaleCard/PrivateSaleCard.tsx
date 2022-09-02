@@ -1,12 +1,12 @@
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
-import { ContractContext } from '../../../../context/ContractContext';
-import { WalletContext } from '../../../../context/WalletContext';
-import ConnectWalletButton from '../../../Wallet/ConnectWalletButton';
+import { ContractContext } from '../../../context/ContractContext';
+import { WalletContext } from '../../../context/WalletContext';
+import ConnectWalletButton from '../../Wallet/ConnectWalletButton/ConnectWalletButton';
 import styles from './PrivateSaleCard.module.scss';
 
 const PrivateSaleCard: FC = () => {
     const { connectedWallet, isConnected } = useContext(WalletContext);
-    const contractContext = useContext(ContractContext);
+    const { hyperMintContract } = useContext(ContractContext);
     const [isOnEarlyAccessList, setIsOnEarlyAccessList] = useState(false);
 
     const canAccessPrivateSale = useMemo(() => isConnected && isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
@@ -18,10 +18,7 @@ const PrivateSaleCard: FC = () => {
             return;
         }
 
-        const contract = contractContext.hyperMintContract;
-
-        // TODO: need to get tokenId (0 for 721, param for 1155)
-        const tokenAllocation = await contract?.getTokenAllocation('0', walletAddress)
+        const tokenAllocation = await hyperMintContract?.getTokenAllocation('0', walletAddress)
             .catch(() => {
                 setIsOnEarlyAccessList(false);
             });
@@ -37,7 +34,6 @@ const PrivateSaleCard: FC = () => {
         }
     }, [isConnected, connectedWallet?.address]);
 
-    // This is where we show the purchase flow
     if (canAccessPrivateSale) return null;
 
     if (cantAccessPrivateSale) {

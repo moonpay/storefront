@@ -1,20 +1,19 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import TokenCard from '../../Token/TokenCard';
 import mysteryTokenImage from '../../../assets/token.png';
-import SaleCard from '../../SaleCard';
 import { WalletContext } from '../../../context/WalletContext';
 import { ContractContext } from '../../../context/ContractContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
 import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
+import PrivateSaleCard from '../PrivateSaleCard';
 import styles from './ERC721Checkout.module.scss';
 
 interface IERC721Checkout {
     token?: any; // TODO: add token types
     publicSaleLive: boolean;
-    privateSaleLive: boolean;
 }
 
-const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, privateSaleLive }) => {
+const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
     const { hyperMintContract } = useContext(ContractContext);
     const { connectedWallet, isConnected } = useContext(WalletContext);
     const [canPurchase, setCanPurchase] = useState(false);
@@ -33,7 +32,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, privateSal
 
         setAllocation(walletAllocation);
 
-        return walletAllocation;
+        return walletAllocation ?? [];
     };
 
     useEffect(() => {
@@ -52,9 +51,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, privateSal
 
     if (!canPurchase) {
         return (
-            <SaleCard
-                privateSaleLive={privateSaleLive}
-            />
+            <PrivateSaleCard />
         );
     }
 
@@ -64,11 +61,13 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, privateSal
                 token={{
                     id: token?.id,
                     name: 'Mystery Token',
+                    description: 'Each NFT in this collection is completely unique. Once your purchase is processed, the image and details of your 1 of 1 token will be revealed to you. Until then, enjoy the thrill of claiming some mystery tokens.',
                     image: mysteryTokenImage,
                     type: NFTContractType.ERC721
                 }}
                 publicSaleLive={publicSaleLive}
                 allocation={allocation}
+                onSuccessfulPurchase={async () => await getWalletAllocation(connectedWallet?.address)}
             />
         </div>
     );
