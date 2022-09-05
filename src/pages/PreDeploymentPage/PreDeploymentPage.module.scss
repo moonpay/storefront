@@ -1,0 +1,23 @@
+.wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.contentWrapper {
+    margin-top: var(--spacing-xxlarge);
+}
+
+.heading {
+    color: rgb(var(--color-white));
+    margin: 0;
+    text-align: center;
+}
+
+.content {
+    color: rgb(var(--color-white));
+    text-align: center;
+    margin-top: var(--spacing-xsmall);
+}

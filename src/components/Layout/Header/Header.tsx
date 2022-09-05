@@ -1,9 +1,9 @@
 import { FC, useContext, useMemo } from 'react';
 import { ContractContext } from '../../../context/ContractContext';
 import Countdown from '../../Common/Countdown';
-import logo from '../../../assets/logo.png';
 import ConnectedWallet from '../../Wallet/ConnectedWallet';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
+import Logo from '../../Common/Logo';
 import styles from './Header.module.scss';
 
 interface IHeader {
@@ -27,7 +27,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
         <header className={styles.header}>
             <div className={styles.headerContainer}>
                 <div className={styles.logo}>
-                    <img src={logo}/>
+                    <Logo />
                 </div>
 
                 <section className={styles.connectedWallet}>
