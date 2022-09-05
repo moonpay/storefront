@@ -1,5 +1,4 @@
 import { FC, useContext } from 'react';
-import { ContractContext } from '../../../context/ContractContext';
 import { WalletContext } from '../../../context/WalletContext';
 import styles from './ConnectWalletButton.module.scss';
 

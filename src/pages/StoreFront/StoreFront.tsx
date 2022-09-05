@@ -79,7 +79,7 @@ const StoreFront: FC = () => {
 
             <div
                 className={`${styles.hero} ${nftContract?.network.contractType === NFTContractType.ERC1155 && styles.erc1155Hero}`}
-                style={{ backgroundImage: `url(${themeContext.images?.background?.src})` }}
+                style={{ backgroundImage: `url(${themeContext.images?.background})` }}
             >
                 <Header
                     publicSaleLive={publicSaleLive}

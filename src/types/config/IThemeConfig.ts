@@ -1,15 +1,11 @@
 export interface IThemeColors {
     primary: string;
+    success: string;
+    error: string;
 }
-
-interface IThemeImage {
-    src: string;
-    alt: string
-}
-
 export interface IThemeImages {
-    logo: IThemeImage;
-    background: IThemeImage;
+    logo: string;
+    background: string;
 }
 
 export interface IThemeConfig {

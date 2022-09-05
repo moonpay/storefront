@@ -15,6 +15,15 @@ export const ThemeProvider: FC<IThemeProvider> = ({ children, configurationImpor
         setColors(config.colors);
     }, []);
 
+    useEffect(() => {
+        const root: any = document.querySelector(':root');
+
+        if (colors?.primary) root.style.setProperty('--color-primary', colors.primary);
+        if (colors?.success) root.style.setProperty('--color-state-success', colors.success);
+        if (colors?.error) root.style.setProperty('--color-state-error', colors.error);
+
+    }, [colors]);
+
     return (
         <ThemeContext.Provider value={{ colors, images }}>
             {children}

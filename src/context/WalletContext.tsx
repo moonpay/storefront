@@ -41,7 +41,6 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
             await hyperMintContract.connect();
             await getConnectedWallet();
         } catch (e) {
-            console.error('Unable to connect to wallet', e);
             setIsConnected(false);
             setAddress(undefined);
         }
