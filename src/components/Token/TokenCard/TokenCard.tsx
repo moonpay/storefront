@@ -133,15 +133,20 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                 }
             });
         } catch (e) {
-            toast((e as Error)?.message ?? 'Purchase failed', {
-                style: {
-                    background: `rgb(${styles.getPropertyValue('--color-state-error')})`,
-                    color: `rgb(${styles.getPropertyValue('--color-white')})`
-                }
-            });
-        } finally {
-            setIsPurchasing(false);
+            const error = e as Error;
+            const ignorableMessages = ['HM (connect) - Failed selecting wallet'];
+
+            if (!ignorableMessages.includes(error.message)) {
+                toast(error.message ?? 'Purchase failed', {
+                    style: {
+                        background: `rgb(${styles.getPropertyValue('--color-state-error')})`,
+                        color: `rgb(${styles.getPropertyValue('--color-white')})`
+                    }
+                });
+            }
         }
+
+        setIsPurchasing(false);
     };
 
     if (token?.remaining === 0 && content?.hideSoldOutTokens) {

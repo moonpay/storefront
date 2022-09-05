@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { createContext, FC, useEffect, useMemo, useState } from 'react';
+import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
+import LoadingPage from '../pages/LoadingPage';
+import PreDeploymentPage from '../pages/PreDeploymentPage';
 import { ConfigType } from '../types/Config';
 import { IContractContext, IContractProvider } from '../types/context/IContractContext';
 import { IHyperMintContract, INFTContract } from '../types/HyperMint/IContract';
@@ -12,6 +14,7 @@ export const ContractContext = createContext<IContractContext>({} as IContractCo
 
 const contractConfig = (new ConfigurationImporter()).loadConfig(ConfigType.CONTRACT);
 export const ContractProvider: FC<IContractProvider> = ({ children }) => {
+    const [loading, setLoading] = useState(false);
     const [nftContract, setNftContract] = useState<INFTContract>();
     const hyperMintContract = useMemo<IHyperMintContract>(() => {
         return new Contract(contractConfig);
@@ -19,12 +22,29 @@ export const ContractProvider: FC<IContractProvider> = ({ children }) => {
 
     useEffect(() => {
         (async () => {
-            // TODO: need to handle a non deployed contract error here
-            const contractInfo = await hyperMintContract.getContractInformation();
+            setLoading(true);
 
-            setNftContract(contractInfo);
+            try {
+                const contractInfo = await hyperMintContract.getContractInformation();
+
+                if ((contractInfo as any).error) {
+                    throw new Error();
+                }
+
+                setNftContract(contractInfo);
+            } catch (e) {
+                setNftContract(undefined);
+            }
+
+            setLoading(false);
         })();
     }, [hyperMintContract]);
+
+    if (!loading && !nftContract) {
+        return (
+            <PreDeploymentPage />
+        );
+    }
 
     return (
         <ContractContext.Provider value={{ hyperMintContract, nftContract }}>
