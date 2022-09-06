@@ -35,7 +35,9 @@ jobs:
             - deps-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Build demo storefront
-          command: npm run build
+          command: |
+            CI=false
+            npm run build
       - persist_to_workspace:
           root: .
           paths:
