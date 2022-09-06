@@ -24,7 +24,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
             return [];
         }
 
-        const walletAllocation = await hyperMintContract?.getTokenAllocation('0', walletAddress)
+        const walletAllocation = await hyperMintContract?.getTokenAllocation('1', walletAddress)
             .catch(() => {
                 setAllocation(undefined);
                 return [];
@@ -59,7 +59,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
         <div className={styles.limiter}>
             <TokenCard
                 token={{
-                    id: token?.id,
+                    id: token?.id ?? 1,
                     name: 'Mystery Token',
                     description: 'Each NFT in this collection is completely unique. Once your purchase is processed, the image and details of your 1 of 1 token will be revealed to you. Until then, enjoy the thrill of claiming some mystery tokens.',
                     image: mysteryTokenImage,

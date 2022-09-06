@@ -27,10 +27,11 @@ const StoreFront: FC = () => {
 
     const getToken = async (token: IToken): Promise<any> => {
         try {
-            const metadata = await hyperMintContract?.getTokenMetadata(token.id);
+            const id = contractIsERC721 ? 1 : token.id;
+            const metadata = await hyperMintContract?.getTokenMetadata(id);
 
             return {
-                id: token.id,
+                id,
                 remaining: token.remaining,
                 price: token.price,
                 ...metadata
@@ -82,9 +83,13 @@ const StoreFront: FC = () => {
     };
 
     useEffect(() => {
-        getContractTokens();
-        calculateAndSetPrivateSaleStart();
+        if (nftContract) {
+            calculateAndSetPrivateSaleStart();
 
+            if (!contractTokens?.length) {
+                getContractTokens();
+            }
+        }
     }, [nftContract]);
 
     return (
@@ -106,36 +111,42 @@ const StoreFront: FC = () => {
                     setPrivateSaleLive={setPrivateSaleLive}
                 />
 
+                <div>
+                    <Container>
+                        <div className={styles.heroGrid}>
+                            <CollectionDetails />
 
-                <Container>
-                    <div className={`${styles.heroGrid} ${contractIsERC721 ? styles.erc721HeroGrid : ''}`}>
-                        <CollectionDetails />
+                            {contractIsERC721 && (
+                                <ERC721Checkout
+                                    token={contractTokens ? contractTokens[0] : undefined}
+                                    publicSaleLive={publicSaleLive}
+                                />
+                            )}
+                        </div>
+                    </Container>
 
-                        {contractIsERC721 && (
-                            <ERC721Checkout
-                                token={contractTokens ? contractTokens[0] : undefined}
-                                publicSaleLive={publicSaleLive}
-                            />
-                        )}
-                    </div>
-                </Container>
+                    {contractIsERC721 && (
+                        <Footer />
+                    )}
+                </div>
+
             </div>
 
             {!showERC721Layout && (
-                <main className={styles.main}>
-                    <Container narrow>
-                        <ERC1155Checkout
-                            onSuccessfulPurchase={getContractTokens}
-                            tokens={contractTokens ?? []}
-                            publicSaleLive={publicSaleLive}
-                        />
-                    </Container>
-                </main>
-            )}
+                <>
+                    <main className={styles.main}>
+                        <Container narrow>
+                            <ERC1155Checkout
+                                onSuccessfulPurchase={getContractTokens}
+                                tokens={contractTokens ?? []}
+                                publicSaleLive={publicSaleLive}
+                            />
+                        </Container>
+                    </main>
 
-            <Footer
-                className={showERC721Layout ? styles.erc721Footer : ''}
-            />
+                    <Footer />
+                </>
+            )}
         </>
     );
 };

@@ -99,9 +99,19 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
 
     const maxAllocation = useMemo(() => {
         const maxPerTransaction = nftContract?.erc721MaxPerTransaction;
+        const remainingCount = token?.remaining;
+
+        if (remainingCount && remainingCount > 0) {
+            return remainingCount;
+        }
 
         if (!allocation) {
-            return maxPerTransaction ?? 0;
+            // Max per transaction isnt set OR is 0 (0 means unlimited)
+            if (!maxPerTransaction) {
+                return undefined;
+            }
+
+            return maxPerTransaction;
         }
 
         const remainingAllocationCount = allocation.reduce((prev, cur) => {
@@ -113,7 +123,11 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         return Math.min(remainingAllocationCount, (maxPerTransaction ?? remainingAllocationCount));
     }, [allocation]);
 
-    const inputHasError = useMemo(() => !!(quantity > maxAllocation), [quantity, maxAllocation]);
+    const inputHasError = useMemo(() => {
+        if (maxAllocation === undefined) return false;
+
+        return !!(quantity > maxAllocation);
+    }, [quantity, maxAllocation]);
 
     const onPurchase = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -212,7 +226,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                     <div className={styles.inputHeader}>
                                         <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
 
-                                        {maxAllocation > 0 && (
+                                        {maxAllocation && maxAllocation > 0 && (
                                             <span className={styles.inputContent}>Max. {maxAllocation}</span>
                                         )}
                                     </div>
@@ -226,7 +240,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                             className={`${styles.input} ${inputHasError && styles.inputError}`}
                                             onChange={e => setQuantity(Number(e.target.value))}
                                             min={1}
-                                            max={maxAllocation > 0 ? maxAllocation : undefined}
+                                            max={maxAllocation && maxAllocation > 0 ? maxAllocation : undefined}
                                             disabled={token.remaining === 0}
                                         />
                                     </div>

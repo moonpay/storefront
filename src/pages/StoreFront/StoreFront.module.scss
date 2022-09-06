@@ -55,15 +55,6 @@
     }
 }
 
-.erc721HeroGrid {
-    padding-bottom: calc(var(--spacing-xxlarge) * 4);
-}
-
-.erc721Footer {
-    --base-negative-margin: calc(var(--spacing-xxlarge) * -1);
-    margin-top: calc(var(--base-negative-margin) * 2);
-}
-
 .main {
     align-items: center;
     display: flex;

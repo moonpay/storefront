@@ -16,6 +16,7 @@ export const ContractProvider: FC<IContractProvider> = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [nftContract, setNftContract] = useState<INFTContract>();
     const hyperMintContract = useMemo<IHyperMintContract>(() => {
+        // TODO: fix this running twice
         return new Contract(contractConfig);
     }, []);
 
@@ -26,6 +27,7 @@ export const ContractProvider: FC<IContractProvider> = ({ children }) => {
             try {
                 const contractInfo = await hyperMintContract.getContractInformation();
 
+                // TODO: make client SDK throw errors
                 if ((contractInfo as any).error) {
                     throw new Error();
                 }
