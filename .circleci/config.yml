@@ -58,10 +58,10 @@ jobs:
 workflows:
   build-deploy:
     jobs:
-      - install-dependencies
-        filters:
-          branches:
-            only: main
+      - install-dependencies:
+          filters:
+            branches:
+              only: main
       - build-storefront:
           requires:
             - install-dependencies
