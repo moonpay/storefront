@@ -12,7 +12,7 @@ interface IERC1155Checkout {
 const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive, onSuccessfulPurchase }) => {
     return (
         <section className={styles.grid}>
-            {tokens.map((token) => (
+            {(tokens.filter(t => !!t) ?? []).map((token) => (
                 <TokenCard
                     onSuccessfulPurchase={onSuccessfulPurchase}
                     key={`ERC1155-${token.id}`}

@@ -5,9 +5,9 @@ import { IToken, ITokenMetadata, ITokenAllocationBreakdown } from './IToken';
 import { ITransaction, TransactionStatus } from './ITransaction';
 
 export enum NFTContractMetadataType {
-    NONE = 'NONE',
-    HOSTED = 'HOSTED',
-    URL = 'URL'
+    None = 'None',
+    Hosted = 'Hosted',
+    Url = 'Url'
 }
 
 export enum NFTContractType {
@@ -16,15 +16,15 @@ export enum NFTContractType {
 }
 
 export enum NetworkType {
-    ETHEREUM = 'ETHEREUM',
-    POLYGON = 'POLYGON',
-    SOLANA = 'SOLANA'
+    Ethereum = 'Ethereum',
+    Polygon = 'Polygon',
+    Solana = 'Solana'
 }
 
 export enum NetworkEnvironment {
-    EMULATOR = 'EMULATOR',
-    TESTNET = 'TESTNET',
-    MAINNET = 'MAINNET'
+    Emulator = 'Emulator',
+    Testnet = 'Testnet',
+    Mainnet = 'Mainnet'
 }
 
 export enum NetworkChain {

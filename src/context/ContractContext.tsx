@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
-import LoadingPage from '../pages/LoadingPage';
+import { createContext, FC, useEffect, useMemo, useState } from 'react';
 import PreDeploymentPage from '../pages/PreDeploymentPage';
 import { ConfigType } from '../types/Config';
 import { IContractContext, IContractProvider } from '../types/context/IContractContext';

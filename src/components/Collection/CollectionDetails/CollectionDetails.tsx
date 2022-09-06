@@ -16,7 +16,7 @@ const CollectionDetails: FC = () => {
     return (
         <>
             <section className={styles.wrapper}>
-                <h3 className={styles.subHeading}>Bored Ape Yacht Club Presents</h3>
+                <h3 className={styles.subHeading}>{contentContext?.author} Presents</h3>
                 <h1 className={styles.heading}>{contentContext?.title}</h1>
                 <p className={styles.description}>{truncatedContent}</p>
 

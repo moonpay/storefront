@@ -1,6 +1,6 @@
 import { FC, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import EthereumWalletHelpers from '../../../utils/EthereumWalletHelpers';
+import EVMWalletHelpers from '../../../utils/EVMWalletHelpers';
 import { ContractContext } from '../../../context/ContractContext';
 import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
 import TokenAllocationBreakdown from '../TokenAllocationBreakdown/TokenAllocationBreakdown';
@@ -15,7 +15,7 @@ interface ITokenCard {
     token: {
         id: string;
         name: string;
-        description: string;
+        description?: string;
         external_url?: string;
         image: string;
         remaining?: number;
@@ -30,7 +30,7 @@ interface ITokenCard {
 const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSuccessfulPurchase }) => {
     const content = useContext(ContentContext);
     const { nftContract, hyperMintContract } = useContext(ContractContext);
-    const { connectedWallet } = useContext(WalletContext);
+    const { connectedWallet, getConnectedWallet } = useContext(WalletContext);
     const [quantity, setQuantity] = useState(1);
     const [showBreakdown, setShowBreakdown] = useState(false);
     const [purchasing, setIsPurchasing] = useState(false);
@@ -113,6 +113,8 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         return Math.min(remainingAllocationCount, (maxPerTransaction ?? remainingAllocationCount));
     }, [allocation]);
 
+    const inputHasError = useMemo(() => !!(quantity > maxAllocation), [quantity, maxAllocation]);
+
     const onPurchase = async (e: SyntheticEvent) => {
         e.preventDefault();
 
@@ -122,7 +124,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         try {
             const method = publicSaleLive ? 'buy' : 'buyAuthorised';
 
-            await hyperMintContract[method](quantity, 1, true);
+            await hyperMintContract[method](quantity, Number(token.id), true);
 
             onSuccessfulPurchase(token.id);
 
@@ -146,6 +148,8 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
             }
         }
 
+        await getConnectedWallet();
+
         setIsPurchasing(false);
     };
 
@@ -155,16 +159,18 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
 
     return (
         <>
-            <Modal
-                isOpen={showingDetails}
-                onClose={() => setShowingDetails(false)}
-                content={
-                    <div>
-                        <h3 className={styles.modalHeader}>{token.name} Description</h3>
-                        <p>{token.description}</p>
-                    </div>
-                }
-            />
+            {token.description && (
+                <Modal
+                    isOpen={showingDetails}
+                    onClose={() => setShowingDetails(false)}
+                    content={
+                        <div>
+                            <h3 className={styles.modalHeader}>{token.name} Description</h3>
+                            <p>{token.description}</p>
+                        </div>
+                    }
+                />
+            )}
 
             <article className={styles.card}>
                 <header className={styles.header}>
@@ -201,7 +207,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                 showBreakdown={showBreakdown}
                             />
 
-                            <form action="" onSubmit={e => e.preventDefault()}>
+                            <form onSubmit={e => e.preventDefault()}>
                                 <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
                                     <div className={styles.inputHeader}>
                                         <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
@@ -216,8 +222,8 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                             type="number"
                                             id="quantity"
                                             name="quantity"
-                                            value={quantity}
-                                            className={styles.input}
+                                            value={quantity.toString()}
+                                            className={`${styles.input} ${inputHasError && styles.inputError}`}
                                             onChange={e => setQuantity(Number(e.target.value))}
                                             min={1}
                                             max={maxAllocation > 0 ? maxAllocation : undefined}
@@ -227,9 +233,10 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                 </div>
 
                                 <TokenPurchaseButton
-                                    total={EthereumWalletHelpers.formatBalance(totalCost.toString(), 'ETH')}
+                                    total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
                                     onPurchase={onPurchase}
                                     purchasing={purchasing}
+                                    disabled={inputHasError}
                                     soldOut={token.remaining === 0}
                                 />
                             </form>

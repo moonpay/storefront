@@ -23,6 +23,7 @@ const StoreFront: FC = () => {
     const [contractTokens, setContractTokens] = useState<any[]>();
 
     const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
+    const showERC721Layout = useMemo(() => contractIsERC721 || !contractTokens?.length, [contractTokens, contractIsERC721]);
 
     const getToken = async (token: IToken): Promise<any> => {
         try {
@@ -43,15 +44,25 @@ const StoreFront: FC = () => {
 
     const getContractTokens = async () => {
         const contractTokens = await hyperMintContract?.getTokens() ?? [];
+
+        // TODO: improve error handling
+        if ((contractTokens as any).error) {
+            setContractTokens(undefined);
+        }
+
         // TODO: add type
         const tokensWithData = await Promise.all(contractTokens.map(token => getToken(token)));
+
         setContractTokens(tokensWithData);
     };
 
-    useEffect(() => {
-        if (!nftContract?.whitelists?.length) return;
-
+    const calculateAndSetPrivateSaleStart = () => {
         let privateSaleStart: Date | undefined;
+
+        if (!nftContract?.whitelists.length) {
+            setPrivateSaleDate(undefined);
+            return;
+        }
 
         if (nftContract.whitelists.length === 1) {
             const startDate = (nftContract.whitelists[0]?.startDate) ?? 0;
@@ -66,8 +77,14 @@ const StoreFront: FC = () => {
 
             privateSaleStart = new Date(orderedWhitelists[0]?.startDate ?? 0);
         }
-        getContractTokens();
+
         setPrivateSaleDate(privateSaleStart);
+    };
+
+    useEffect(() => {
+        getContractTokens();
+        calculateAndSetPrivateSaleStart();
+
     }, [nftContract]);
 
     return (
@@ -78,7 +95,7 @@ const StoreFront: FC = () => {
             />
 
             <div
-                className={`${styles.hero} ${nftContract?.network.contractType === NFTContractType.ERC1155 && styles.erc1155Hero}`}
+                className={`${styles.hero} ${!showERC721Layout && styles.erc1155Hero}`}
                 style={{ backgroundImage: `url(${themeContext.images?.background})` }}
             >
                 <Header
@@ -104,7 +121,7 @@ const StoreFront: FC = () => {
                 </Container>
             </div>
 
-            {!contractIsERC721 && (
+            {!showERC721Layout && (
                 <main className={styles.main}>
                     <Container narrow>
                         <ERC1155Checkout
@@ -117,7 +134,7 @@ const StoreFront: FC = () => {
             )}
 
             <Footer
-                className={contractIsERC721 ? styles.erc721Footer : ''}
+                className={showERC721Layout ? styles.erc721Footer : ''}
             />
         </>
     );

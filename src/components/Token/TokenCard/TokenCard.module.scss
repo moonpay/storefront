@@ -65,6 +65,12 @@
     }
 }
 
+.inputError {
+    border: 1px solid rgb(var(--color-state-error));
+    color: rgb(var(--color-state-error));
+    outline: rgb(var(--color-state-error));
+}
+
 .inputHeader {
     display: flex;
     justify-content: space-between;

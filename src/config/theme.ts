@@ -5,7 +5,7 @@ export default {
     },
     colors: {
         primary: '22, 230, 181',
-        success: '243, 174, 165',
+        success: '22, 230, 181',
         error: '243, 174, 165'
     }
 };

@@ -1,13 +1,13 @@
 import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
 import { IWalletContext, IWalletProvider } from '../types/context/IWalletContext';
 import { IWalletBalance } from '../types/HyperMint/IWallet';
-import EthereumWalletHelpers from '../utils/EthereumWalletHelpers';
+import EVMWalletHelpers from '../utils/EVMWalletHelpers';
 import { ContractContext } from './ContractContext';
 
 export const WalletContext = createContext<IWalletContext>({} as IWalletContext);
 
 export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
-    const { hyperMintContract } = useContext(ContractContext);
+    const { hyperMintContract, nftContract } = useContext(ContractContext);
     const [isConnected, setIsConnected] = useState(false);
     const [address, setAddress] = useState<string>();
     const [balance, setBalance] = useState<IWalletBalance>();
@@ -16,8 +16,8 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
         if (address) {
             return {
                 address,
-                formattedAddress: EthereumWalletHelpers.truncateAddress(address ?? ''),
-                formattedBalance: balance?.formatted ? EthereumWalletHelpers.formatBalance(balance.formatted, balance.symbol) : '',
+                formattedAddress: EVMWalletHelpers.truncateAddress(address ?? ''),
+                formattedBalance: balance?.formatted ? EVMWalletHelpers.formatBalance(balance.formatted, nftContract) : '',
             };
         }
     }, [address]);
@@ -62,7 +62,8 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
                 connect,
                 disconnect,
                 connectedWallet,
-                isConnected
+                isConnected,
+                getConnectedWallet
             }}
         >
             {children}

@@ -6,7 +6,7 @@ import styles from './PrivateSaleCard.module.scss';
 
 const PrivateSaleCard: FC = () => {
     const { connectedWallet, isConnected } = useContext(WalletContext);
-    const { hyperMintContract } = useContext(ContractContext);
+    const { hyperMintContract, nftContract } = useContext(ContractContext);
     const [isOnEarlyAccessList, setIsOnEarlyAccessList] = useState(false);
 
     const canAccessPrivateSale = useMemo(() => isConnected && isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
@@ -49,16 +49,20 @@ const PrivateSaleCard: FC = () => {
         );
     }
 
-    return (
-        <article className={styles.card}>
-            <div className={styles.cardContentBlock}>
-                <h2 className={`${styles.cardContent} ${styles.cardHeader}`}>The private sale is live</h2>
-                <p className={styles.cardContent}>All private access list members are now free to begin purchasing tokens according to their allocation.</p>
-            </div>
+    if ((nftContract?.whitelists.length ?? 0) > 0) {
+        return (
+            <article className={styles.card}>
+                <div className={styles.cardContentBlock}>
+                    <h2 className={`${styles.cardContent} ${styles.cardHeader}`}>The private sale is live</h2>
+                    <p className={styles.cardContent}>All private access list members are now free to begin purchasing tokens according to their allocation.</p>
+                </div>
 
-            <ConnectWalletButton canAccessPrivateSale={isOnEarlyAccessList} />
-        </article>
-    );
+                <ConnectWalletButton canAccessPrivateSale={isOnEarlyAccessList} />
+            </article>
+        );
+    }
+
+    return null;
 };
 
 export default PrivateSaleCard;

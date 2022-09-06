@@ -23,12 +23,12 @@ To update your fonts you should edit the `scss/_variables.scss` file.
 This will configure the title and description of the collection, as well as the site metadata used by crawlers to display the site on search engines.
 
 #### Options
-| key               | value   | description                                                                                                           | Default Value |
-|-------------------|---------|-----------------------------------------------------------------------------------------------------------------------|---------------|
-| title             | string  | The title that shows in the hero of the store                                                                         |               |
-| description       | string  | The description that shows in the hero of the store                                                                   |               |
-| author            | stirng  | The name of the company/person that running the drop                                                                  |               |
-| hideSoldOutTokens | boolean | When set to true, tokens with no remaining supply will not display. When false tokens will be displayed as 'Sold Out' | false         |
+| key               | value   | Required | description                                                                                                           | Default Value |
+|-------------------|---------|----------|-----------------------------------------------------------------------------------------------------------------------|---------------|
+| title             | string  | ✅        | The title that shows in the hero of the store                                                                         |               |
+| description       | string  | ✅        | The description that shows in the hero of the store                                                                   |               |
+| author            | string  | ✅        | The name of the company/person that running the drop                                                                  |               |
+| hideSoldOutTokens | boolean | ❌        | When set to true, tokens with no remaining supply will not display. When false tokens will be displayed as 'Sold Out' | false         |
 
 ## 👩‍💻 Development
 1. Run `npm install`

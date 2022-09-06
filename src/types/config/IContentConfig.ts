@@ -1,6 +1,7 @@
 export interface ICollectionContent {
     title: string;
     description: string;
+    author: string;
     hideSoldOutTokens?: boolean;
 }
 
