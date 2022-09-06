@@ -55,7 +55,7 @@ jobs:
           at: .
       - run:
           name: Upload website to the S3 bucket
-          command: aws s3 sync out/ s3://demo.hypermint.com/
+          command: aws s3 sync build/ s3://demo.hypermint.com/
 
 workflows:
   build-deploy:
