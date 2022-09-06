@@ -68,5 +68,5 @@ workflows:
       - deploy-demo-storefront:
           context: aws-config
           requires:
-            - build-site
+            - build-storefront
 
