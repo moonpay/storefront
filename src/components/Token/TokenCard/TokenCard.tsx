@@ -15,10 +15,11 @@ interface ITokenCard {
     token: {
         id: string;
         name: string;
+        maxPerTransaction: number;
         description?: string;
         external_url?: string;
         image: string;
-        remaining?: number;
+        remaining: number;
         price?: number;
         type: NFTContractType
     };
@@ -37,7 +38,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     const [canPurchase, setCanPurchase] = useState(false);
     const [showingDetails, setShowingDetails] = useState(false);
 
-    const getWalletAllocation = async (walletAddress?: string): Promise<boolean> => {
+    const doesWalletHaveAllocation = async (walletAddress?: string): Promise<boolean> => {
         // We pass in allocation for 721 contracts
         if (allocation !== undefined) {
             return allocation?.length > 0;
@@ -54,13 +55,13 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     useEffect(() => {
         const buyingEnabled = nftContract?.allowBuyOnNetwork || nftContract?.allowBuyWithMoonPay;
 
-        if (publicSaleLive) {
+        if (publicSaleLive && buyingEnabled) {
             setCanPurchase(true);
-        } else if (!connectedWallet || !(buyingEnabled)) {
+        } else if (!connectedWallet || !buyingEnabled) {
             setCanPurchase(false);
         } else {
             (async () => {
-                const hasAllocation = await getWalletAllocation(connectedWallet.address);
+                const hasAllocation = await doesWalletHaveAllocation(connectedWallet.address);
 
                 return setCanPurchase(hasAllocation);
             })();
@@ -98,29 +99,30 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     }, [quantity, allocation]);
 
     const maxAllocation = useMemo(() => {
-        const maxPerTransaction = nftContract?.erc721MaxPerTransaction;
-        const remainingCount = token?.remaining;
+        let maxPerTransaction = token.maxPerTransaction;
+        const remainingCount = token.remaining;
 
-        if (remainingCount && remainingCount > 0) {
-            return remainingCount;
+        if (!remainingCount) {
+            return 0; // Token has sold out
+        }
+
+        // 0 means unlimited per transaction
+        if (maxPerTransaction === 0) {
+            // We cant buy more than how many are remaining
+            maxPerTransaction = remainingCount;
         }
 
         if (!allocation) {
-            // Max per transaction isnt set OR is 0 (0 means unlimited)
-            if (!maxPerTransaction) {
-                return undefined;
-            }
-
-            return maxPerTransaction;
+            return Math.min(maxPerTransaction, remainingCount);
         }
 
-        const remainingAllocationCount = allocation.reduce((prev, cur) => {
-            const allowedCount = cur.remainingAllocation ?? nftContract?.erc721MaxPerTransaction ?? 0;
+        const remainingAllocation = allocation.reduce((prev, cur) => {
+            const remaining = cur?.remainingAllocation ?? Math.min(maxPerTransaction, remainingCount);
 
-            return prev + allowedCount;
+            return prev + remaining;
         }, 0);
 
-        return Math.min(remainingAllocationCount, (maxPerTransaction ?? remainingAllocationCount));
+        return remainingAllocation;
     }, [allocation]);
 
     const inputHasError = useMemo(() => {
@@ -226,7 +228,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                     <div className={styles.inputHeader}>
                                         <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
 
-                                        {maxAllocation && maxAllocation > 0 && (
+                                        {maxAllocation > 0 && (
                                             <span className={styles.inputContent}>Max. {maxAllocation}</span>
                                         )}
                                     </div>
