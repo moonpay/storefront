@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^0.4.8",
     "@types/node": "^16.11.47",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@wagmi/core": "^0.5.4",
     "ethers": "^5.6.9",
     "normalize.css": "^8.0.1",
     "number-abbreviate": "^2.0.0",
@@ -15,8 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.3.0",
-    "react-scripts": "5.0.1",
-    "wagmi": "^0.6.3"
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "build": "react-scripts build",
