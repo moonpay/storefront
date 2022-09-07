@@ -1,38 +1,34 @@
 /* eslint-disable import/no-unresolved */
 import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import Footer from '../../components/Layout/Footer';
-import Header from '../../components/Layout/Header';
 import { ContractContext } from '../../context/ContractContext';
-import { ThemeContext } from '../../context/ThemeContext';
 import ERC721Checkout from '../../components/Collection/ERC721Checkout';
 import { IToken } from '../../types/HyperMint/IToken';
 import ERC1155Checkout from '../../components/Collection/ERC1155Checkout';
-import Container from '../../components/Layout/Container';
-import CollectionDetails from '../../components/Collection/CollectionDetails';
 import { NFTContractType } from '../../types/HyperMint/IContract';
-import styles from './StoreFront.module.scss';
+import Header from '../../components/Layout/Header';
 
 const StoreFront: FC = () => {
     const { nftContract, hyperMintContract } = useContext(ContractContext);
-    const themeContext = useContext(ThemeContext);
 
     const [publicSaleLive, setPublicSaleLive] = useState(false);
     const [privateSaleLive, setPrivateSaleLive] = useState(false);
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
+    const [totalMintedTokens, setTotalMintedTokens] = useState<number>();
     const [contractTokens, setContractTokens] = useState<any[]>();
 
     const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
-    const showERC721Layout = useMemo(() => contractIsERC721 || !contractTokens?.length, [contractTokens, contractIsERC721]);
 
     const getToken = async (token: IToken): Promise<any> => {
         try {
-            const metadata = await hyperMintContract?.getTokenMetadata(token.id);
+            const id = contractIsERC721 ? 0 : token.id;
+            const metadata = await hyperMintContract?.getTokenMetadata(id);
 
             return {
-                id: token.id,
+                id,
                 remaining: token.remaining,
                 price: token.price,
+                maxPerTransaction: token?.maxPerTransaction ?? nftContract?.erc721MaxPerTransaction,
                 ...metadata
             };
         } catch (e) {
@@ -50,8 +46,14 @@ const StoreFront: FC = () => {
             setContractTokens(undefined);
         }
 
+        setTotalMintedTokens(
+            contractTokens.reduce((prev, cur) => prev + cur.supply, 0)
+        );
+
         // TODO: add type
-        const tokensWithData = await Promise.all(contractTokens.map(token => getToken(token)));
+        const tokensWithData = contractIsERC721
+            ? contractTokens
+            : await Promise.all(contractTokens.map(token => getToken(token)));
 
         setContractTokens(tokensWithData);
     };
@@ -82,9 +84,13 @@ const StoreFront: FC = () => {
     };
 
     useEffect(() => {
-        getContractTokens();
-        calculateAndSetPrivateSaleStart();
+        if (nftContract) {
+            calculateAndSetPrivateSaleStart();
 
+            if (!contractTokens?.length) {
+                getContractTokens();
+            }
+        }
     }, [nftContract]);
 
     return (
@@ -94,48 +100,27 @@ const StoreFront: FC = () => {
                 reverseOrder={false}
             />
 
-            <div
-                className={`${styles.hero} ${!showERC721Layout && styles.erc1155Hero}`}
-                style={{ backgroundImage: `url(${themeContext.images?.background})` }}
-            >
-                <Header
-                    publicSaleLive={publicSaleLive}
-                    privateSaleLive={privateSaleLive}
-                    privateSaleDate={privateSaleDate}
-                    setPublicSaleLive={setPublicSaleLive}
-                    setPrivateSaleLive={setPrivateSaleLive}
-                />
-
-
-                <Container>
-                    <div className={`${styles.heroGrid} ${contractIsERC721 ? styles.erc721HeroGrid : ''}`}>
-                        <CollectionDetails />
-
-                        {contractIsERC721 && (
-                            <ERC721Checkout
-                                token={contractTokens ? contractTokens[0] : undefined}
-                                publicSaleLive={publicSaleLive}
-                            />
-                        )}
-                    </div>
-                </Container>
-            </div>
-
-            {!showERC721Layout && (
-                <main className={styles.main}>
-                    <Container narrow>
-                        <ERC1155Checkout
-                            onSuccessfulPurchase={getContractTokens}
-                            tokens={contractTokens ?? []}
-                            publicSaleLive={publicSaleLive}
-                        />
-                    </Container>
-                </main>
-            )}
-
-            <Footer
-                className={showERC721Layout ? styles.erc721Footer : ''}
+            <Header
+                publicSaleLive={publicSaleLive}
+                privateSaleLive={privateSaleLive}
+                privateSaleDate={privateSaleDate}
+                setPublicSaleLive={setPublicSaleLive}
+                setPrivateSaleLive={setPrivateSaleLive}
+                totalMintedTokens={totalMintedTokens}
             />
+
+            {contractIsERC721 ? (
+                <ERC721Checkout
+                    token={contractTokens ? contractTokens[0] : undefined}
+                    publicSaleLive={publicSaleLive}
+                />
+            ) : (
+                <ERC1155Checkout
+                    onSuccessfulPurchase={getContractTokens}
+                    tokens={contractTokens ?? []}
+                    publicSaleLive={publicSaleLive}
+                />
+            )}
         </>
     );
 };

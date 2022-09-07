@@ -2,13 +2,6 @@
     background-color: rgb(var(--color-black));
     position: relative;
     z-index: 1;
-
-    @media screen and (min-width: 1024px) {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-    }
 }
 
 .headerContainer {
@@ -68,7 +61,12 @@
 }
 
 .countdownTitle {
-    color: rgb(var(--color-white));
+    color: rgba(var(--color-white), 0.8);
     text-transform: uppercase;
     font-family: var(--font-family-secondary);
+}
+
+.contentEmphasis {
+    color: rgb(var(--color-white));
+    font-weight: var(--font-weight-bold);
 }

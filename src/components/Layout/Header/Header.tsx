@@ -9,12 +9,14 @@ import styles from './Header.module.scss';
 interface IHeader {
     publicSaleLive: boolean;
     privateSaleLive: boolean;
+    totalMintedTokens?: number;
     privateSaleDate?: Date;
+    saleClosesAt?: Date;
     setPublicSaleLive: (isLive: boolean) => void;
     setPrivateSaleLive: (isLive: boolean) => void;
 }
 
-const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, setPublicSaleLive, setPrivateSaleLive }) => {
+const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, totalMintedTokens, saleClosesAt, setPublicSaleLive, setPrivateSaleLive }) => {
     const { nftContract } = useContext(ContractContext);
 
     const shouldShowPrivateSaleCounter = useMemo(() => {
@@ -22,6 +24,14 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
 
         return !publicSaleLive && !!privateSaleDate;
     }, [publicSaleLive, privateSaleDate, privateSaleLive, nftContract?.network]);
+
+    const saleHasEnded = useMemo(() => {
+        if (totalMintedTokens === undefined) return false;
+
+        const saleHasClosed = saleClosesAt ? saleClosesAt < new Date() : false;
+
+        return saleHasClosed || Number(totalMintedTokens) === Number(nftContract?.tokenCount ?? 0);
+    }, [saleClosesAt, nftContract, totalMintedTokens]);
 
     return (
         <header className={styles.header}>
@@ -36,24 +46,34 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
 
                 {!!nftContract && (
                     <section className={styles.timers}>
-                        <div className={`${styles.countdown} ${publicSaleLive && styles.countdownLive}`}>
-                            <p className={styles.countdownTitle}>Public Sale &nbsp;</p>
-                            <Countdown
-                                until={nftContract?.publicSaleAt}
-                                onEndReached={() => setPublicSaleLive(true)}
-                                className={styles.countdownTitle}
-                            />
-                        </div>
-
-                        {shouldShowPrivateSaleCounter && (
-                            <div className={`${styles.countdown} ${privateSaleLive && styles.countdownLive}`}>
-                                <p className={styles.countdownTitle}>Private Sale &nbsp;</p>
-                                <Countdown
-                                    until={privateSaleDate}
-                                    onEndReached={() => setPrivateSaleLive(true)}
-                                    className={styles.countdownTitle}
-                                />
+                        {saleHasEnded ? (
+                            <div className={`${styles.countdown} ${styles.saleEndedCard}`}>
+                                <p className={styles.countdownTitle}>
+                                    The sale has ended <span className={styles.contentEmphasis}>{totalMintedTokens} tokens were minted</span>
+                                </p>
                             </div>
+                        ) : (
+                            <>
+                                <div className={`${styles.countdown} ${publicSaleLive && styles.countdownLive}`}>
+                                    <p className={styles.countdownTitle}>Public Sale &nbsp;</p>
+                                    <Countdown
+                                        until={nftContract?.publicSaleAt}
+                                        onEndReached={() => setPublicSaleLive(true)}
+                                        className={styles.countdownTitle}
+                                    />
+                                </div>
+
+                                {shouldShowPrivateSaleCounter && (
+                                    <div className={`${styles.countdown} ${privateSaleLive && styles.countdownLive}`}>
+                                        <p className={styles.countdownTitle}>Private Sale &nbsp;</p>
+                                        <Countdown
+                                            until={privateSaleDate}
+                                            onEndReached={() => setPrivateSaleLive(true)}
+                                            className={styles.countdownTitle}
+                                        />
+                                    </div>
+                                )}
+                            </>
                         )}
                     </section>
                 )}

@@ -9,16 +9,18 @@ import { WalletContext } from '../../../context/WalletContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
 import Modal from '../../Common/Modal';
 import { ContentContext } from '../../../context/ContentContext';
+import BuyWithCardButton from '../BuyWithCardButton';
 import styles from './TokenCard.module.scss';
 
 interface ITokenCard {
     token: {
         id: string;
         name: string;
+        maxPerTransaction: number;
         description?: string;
         external_url?: string;
         image: string;
-        remaining?: number;
+        remaining: number;
         price?: number;
         type: NFTContractType
     };
@@ -37,7 +39,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     const [canPurchase, setCanPurchase] = useState(false);
     const [showingDetails, setShowingDetails] = useState(false);
 
-    const getWalletAllocation = async (walletAddress?: string): Promise<boolean> => {
+    const doesWalletHaveAllocation = async (walletAddress?: string): Promise<boolean> => {
         // We pass in allocation for 721 contracts
         if (allocation !== undefined) {
             return allocation?.length > 0;
@@ -54,13 +56,13 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     useEffect(() => {
         const buyingEnabled = nftContract?.allowBuyOnNetwork || nftContract?.allowBuyWithMoonPay;
 
-        if (publicSaleLive) {
+        if (publicSaleLive && buyingEnabled) {
             setCanPurchase(true);
-        } else if (!connectedWallet || !(buyingEnabled)) {
+        } else if (!connectedWallet || !buyingEnabled) {
             setCanPurchase(false);
         } else {
             (async () => {
-                const hasAllocation = await getWalletAllocation(connectedWallet.address);
+                const hasAllocation = await doesWalletHaveAllocation(connectedWallet.address);
 
                 return setCanPurchase(hasAllocation);
             })();
@@ -98,22 +100,37 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     }, [quantity, allocation]);
 
     const maxAllocation = useMemo(() => {
-        const maxPerTransaction = nftContract?.erc721MaxPerTransaction;
+        let maxPerTransaction = token.maxPerTransaction;
+        const remainingCount = token.remaining;
 
-        if (!allocation) {
-            return maxPerTransaction ?? 0;
+        if (!remainingCount) {
+            return 0; // Token has sold out
         }
 
-        const remainingAllocationCount = allocation.reduce((prev, cur) => {
-            const allowedCount = cur.remainingAllocation ?? nftContract?.erc721MaxPerTransaction ?? 0;
+        // 0 means unlimited per transaction
+        if (maxPerTransaction === 0) {
+            // We cant buy more than how many are remaining
+            maxPerTransaction = remainingCount;
+        }
 
-            return prev + allowedCount;
+        if (!allocation) {
+            return Math.min(maxPerTransaction, remainingCount);
+        }
+
+        const remainingAllocation = allocation.reduce((prev, cur) => {
+            const remaining = cur?.remainingAllocation ?? Math.min(maxPerTransaction, remainingCount);
+
+            return prev + remaining;
         }, 0);
 
-        return Math.min(remainingAllocationCount, (maxPerTransaction ?? remainingAllocationCount));
+        return remainingAllocation;
     }, [allocation]);
 
-    const inputHasError = useMemo(() => !!(quantity > maxAllocation), [quantity, maxAllocation]);
+    const inputHasError = useMemo(() => {
+        if (maxAllocation === undefined) return false;
+
+        return !!(quantity > maxAllocation);
+    }, [quantity, maxAllocation]);
 
     const onPurchase = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -173,76 +190,87 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
             )}
 
             <article className={styles.card}>
-                <header className={styles.header}>
-                    <h4 className={styles.title}>{token?.name}</h4>
+                <div className={styles.cardInner}>
+                    <header className={styles.header}>
+                        <h4 className={styles.title}>{token?.name}</h4>
 
-                    <div
-                        tabIndex={0}
-                        onClick={() => setShowingDetails(!showingDetails)}
-                        className={styles.infoIcon}
-                    >
-                        <img src={require('../../../assets/icons/info.png')} />
-                    </div>
-                </header>
+                        <div
+                            tabIndex={0}
+                            onClick={() => setShowingDetails(!showingDetails)}
+                            className={styles.infoIcon}
+                        >
+                            <img src={require('../../../assets/icons/info.png')} />
+                        </div>
+                    </header>
 
-                <main>
-                    <div className={styles.imageWrap}>
-                        <img
-                            src={token?.image}
-                            className={styles.image}
-                        />
-
-                        {token.remaining !== undefined && (
-                            <div className={styles.remainingCounter}>
-                                <p>{token.remaining} left</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {canPurchase && (
-                        <div className={styles.form}>
-                            <TokenAllocationBreakdown
-                                allocation={allocation}
-                                setShowBreakdown={setShowBreakdown}
-                                showBreakdown={showBreakdown}
+                    <main>
+                        <div className={styles.imageWrap}>
+                            <img
+                                src={token?.image}
+                                className={styles.image}
                             />
 
-                            <form onSubmit={e => e.preventDefault()}>
-                                <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
-                                    <div className={styles.inputHeader}>
-                                        <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
+                            {token.remaining !== undefined && (
+                                <div className={styles.remainingCounter}>
+                                    <p>{token.remaining} left</p>
+                                </div>
+                            )}
+                        </div>
 
-                                        {maxAllocation > 0 && (
-                                            <span className={styles.inputContent}>Max. {maxAllocation}</span>
+                        {canPurchase && (
+                            <div className={styles.form}>
+                                <TokenAllocationBreakdown
+                                    allocation={allocation}
+                                    setShowBreakdown={setShowBreakdown}
+                                    showBreakdown={showBreakdown}
+                                />
+
+                                <form onSubmit={e => e.preventDefault()}>
+                                    <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
+                                        <div className={styles.inputHeader}>
+                                            <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
+
+                                            {maxAllocation > 0 && (
+                                                <span className={styles.inputContent}>Max. {maxAllocation}</span>
+                                            )}
+                                        </div>
+
+                                        <div className={styles.inputWrap}>
+                                            <input
+                                                type="number"
+                                                id="quantity"
+                                                name="quantity"
+                                                value={quantity.toString()}
+                                                className={`${styles.input} ${inputHasError && styles.inputError}`}
+                                                onChange={e => setQuantity(Number(e.target.value))}
+                                                min={1}
+                                                max={maxAllocation && maxAllocation > 0 ? maxAllocation : undefined}
+                                                disabled={token.remaining === 0}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.purchaseButtons}>
+                                        <TokenPurchaseButton
+                                            total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
+                                            onPurchase={onPurchase}
+                                            purchasing={purchasing}
+                                            disabled={inputHasError}
+                                            soldOut={token.remaining === 0}
+                                        />
+
+                                        {nftContract?.allowBuyWithMoonPay && token.remaining > 0 && (
+                                            <BuyWithCardButton
+                                                tokenId={Number(token.id)}
+                                                disabled={inputHasError}
+                                            />
                                         )}
                                     </div>
-
-                                    <div className={styles.inputWrap}>
-                                        <input
-                                            type="number"
-                                            id="quantity"
-                                            name="quantity"
-                                            value={quantity.toString()}
-                                            className={`${styles.input} ${inputHasError && styles.inputError}`}
-                                            onChange={e => setQuantity(Number(e.target.value))}
-                                            min={1}
-                                            max={maxAllocation > 0 ? maxAllocation : undefined}
-                                            disabled={token.remaining === 0}
-                                        />
-                                    </div>
-                                </div>
-
-                                <TokenPurchaseButton
-                                    total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
-                                    onPurchase={onPurchase}
-                                    purchasing={purchasing}
-                                    disabled={inputHasError}
-                                    soldOut={token.remaining === 0}
-                                />
-                            </form>
-                        </div>
-                    )}
-                </main>
+                                </form>
+                            </div>
+                        )}
+                    </main>
+                </div>
             </article>
         </>
     );

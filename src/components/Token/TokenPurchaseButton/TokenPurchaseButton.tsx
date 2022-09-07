@@ -1,4 +1,5 @@
 import { FC, SyntheticEvent } from 'react';
+import Loading from '../../Common/Loading';
 import styles from './TokenPurchaseButton.module.scss';
 
 interface ITokenPurchaseButton {
@@ -24,7 +25,7 @@ const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onPurchase, purc
             onClick={onPurchase}
             disabled={disabled || purchasing}
         >
-            {purchasing ? 'Processing...' : `${total} | Buy`}
+            {purchasing ? <Loading /> : `${total} | Buy`}
         </button>
     );
 };

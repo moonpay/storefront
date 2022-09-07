@@ -28210,15 +28210,14 @@ var HMAPI = /*#__PURE__*/function () {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log('🚀 ~ file: HMAPI.ts ~ line 32 ~ HMAPI ~ getTokens ~ config', config);
                 url = "".concat(HMAPI.getHMBaseUrl(config), "/nft-contract/").concat(config.contractId, "/tokens");
-                _context2.next = 4;
+                _context2.next = 3;
                 return fetch(url);
 
-              case 4:
+              case 3:
                 return _context2.abrupt("return", _context2.sent.json());
 
-              case 5:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -29183,7 +29182,7 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
     key: "connect",
     value: function connect(wallet) {
       return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var selectedWallet, walletFactory, provider, network, chain, accounts;
+        var walletFactory, provider, network, chain, accounts;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -29197,7 +29196,7 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
 
               case 2:
                 if (wallet) {
-                  _context4.next = 14;
+                  _context4.next = 13;
                   break;
                 }
 
@@ -29206,39 +29205,38 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
                 return _providers_WalletSelector__WEBPACK_IMPORTED_MODULE_7__.WalletSelector.selectWallet(this.logger);
 
               case 6:
-                selectedWallet = _context4.sent;
-                wallet = selectedWallet;
-                _context4.next = 14;
+                wallet = _context4.sent;
+                _context4.next = 13;
                 break;
 
-              case 10:
-                _context4.prev = 10;
+              case 9:
+                _context4.prev = 9;
                 _context4.t0 = _context4["catch"](3);
                 this.logger.log('connect', 'Failed selecting wallet', true);
                 return _context4.abrupt("return");
 
-              case 14:
+              case 13:
                 _providers_WalletSelector__WEBPACK_IMPORTED_MODULE_7__.WalletSelector.closeSelector(this.logger);
                 walletFactory = new _providers_WalletFactory__WEBPACK_IMPORTED_MODULE_5__.WalletFactory(this.logger, this.config);
-                _context4.next = 18;
+                _context4.next = 17;
                 return walletFactory.getProvider(wallet);
 
-              case 18:
+              case 17:
                 this.walletProvider = _context4.sent;
-                _context4.next = 21;
+                _context4.next = 20;
                 return this.walletProvider.getWeb3Provider();
 
-              case 21:
+              case 20:
                 provider = _context4.sent;
                 this.ethereumProvider = provider.provider;
-                _context4.next = 25;
+                _context4.next = 24;
                 return provider.getNetwork();
 
-              case 25:
+              case 24:
                 network = _context4.sent;
 
                 if (!(network.chainId !== this.config.networkChain)) {
-                  _context4.next = 51;
+                  _context4.next = 50;
                   break;
                 }
 
@@ -29246,78 +29244,78 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
                 chain = this.chains[this.config.networkChain];
 
                 if (chain) {
-                  _context4.next = 32;
+                  _context4.next = 31;
                   break;
                 }
 
                 this.logger.log('connect', 'Failed to select network', true);
                 return _context4.abrupt("return");
 
-              case 32:
-                _context4.prev = 32;
-                _context4.next = 35;
+              case 31:
+                _context4.prev = 31;
+                _context4.next = 34;
                 return provider.send('wallet_switchEthereumChain', [{
                   chainId: chain.chainId
                 }]);
 
-              case 35:
-                _context4.next = 48;
+              case 34:
+                _context4.next = 47;
                 break;
 
-              case 37:
-                _context4.prev = 37;
-                _context4.t1 = _context4["catch"](32);
+              case 36:
+                _context4.prev = 36;
+                _context4.t1 = _context4["catch"](31);
                 this.logger.log('connect', 'Adding network...', false, _context4.t1);
-                _context4.prev = 40;
-                _context4.next = 43;
+                _context4.prev = 39;
+                _context4.next = 42;
                 return provider.send('wallet_addEthereumChain', [chain]);
 
-              case 43:
-                _context4.next = 48;
+              case 42:
+                _context4.next = 47;
                 break;
 
-              case 45:
-                _context4.prev = 45;
-                _context4.t2 = _context4["catch"](40);
+              case 44:
+                _context4.prev = 44;
+                _context4.t2 = _context4["catch"](39);
                 this.logger.log('connect', 'Failed to select network', true, _context4.t2);
 
-              case 48:
-                _context4.next = 50;
+              case 47:
+                _context4.next = 49;
                 return this.walletProvider.getWeb3Provider();
 
-              case 50:
+              case 49:
                 provider = _context4.sent;
 
-              case 51:
+              case 50:
                 if (!(wallet !== _types_Enums__WEBPACK_IMPORTED_MODULE_3__.WalletProvider.WalletConnect)) {
-                  _context4.next = 56;
+                  _context4.next = 55;
                   break;
                 }
 
-                _context4.next = 54;
+                _context4.next = 53;
                 return provider.send('eth_requestAccounts', []);
 
-              case 54:
+              case 53:
                 accounts = _context4.sent;
 
                 if (!accounts.length) {
                   this.logger.log('connect', 'No accounts found', true);
                 }
 
-              case 56:
-                _context4.next = 58;
+              case 55:
+                _context4.next = 57;
                 return this.registerChangeEventListeners();
 
-              case 58:
+              case 57:
                 this.signer = provider.getSigner();
                 this.logger.log('connect', 'Connected');
 
-              case 60:
+              case 59:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[3, 10], [32, 37], [40, 45]]);
+        }, _callee4, this, [[3, 9], [31, 36], [39, 44]]);
       }));
     }
   }, {
@@ -29526,7 +29524,7 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
     value: function buy(amount, tokenId) {
       var wait = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
       return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
-        var contract, _yield$this$validateB, totalPrice, contractInfo, isPolygon, wethContract, approveTransaction, buyTransaction;
+        var contract, _yield$this$validateB, totalPrice, contractInfo, isPolygon, wethContract, approveTransaction, buyTransaction, gasLimit, estimatedGasLimit, _gasLimit, _estimatedGasLimit;
 
         return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) {
@@ -29576,37 +29574,25 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
                 this.logger.log('buy', 'Creating buy transaction...');
 
                 if (!(this.config.contractType === _types_Enums__WEBPACK_IMPORTED_MODULE_3__.NFTContractType.ERC721)) {
-                  _context8.next = 34;
+                  _context8.next = 45;
                   break;
                 }
 
-                if (!isPolygon) {
-                  _context8.next = 29;
-                  break;
-                }
+                gasLimit = 100000;
+                _context8.prev = 24;
+                _context8.next = 27;
+                return contract.estimateGas.buy(amount);
 
-                _context8.next = 26;
-                return contract.buy(amount, {
-                  gasLimit: 100000
-                });
-
-              case 26:
-                buyTransaction = _context8.sent;
-                _context8.next = 32;
+              case 27:
+                estimatedGasLimit = _context8.sent;
+                gasLimit = estimatedGasLimit.toNumber();
+                _context8.next = 34;
                 break;
-
-              case 29:
-                _context8.next = 31;
-                return contract.buy(amount, {
-                  gasLimit: 100000
-                });
 
               case 31:
-                buyTransaction = _context8.sent;
-
-              case 32:
-                _context8.next = 43;
-                break;
+                _context8.prev = 31;
+                _context8.t0 = _context8["catch"](24);
+                this.logger.log('buy', 'Unable to calculate gas limit', false);
 
               case 34:
                 if (!isPolygon) {
@@ -29615,8 +29601,8 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
                 }
 
                 _context8.next = 37;
-                return contract.buy(tokenId, amount, {
-                  gasLimit: 100000
+                return contract.buy(amount, {
+                  gasLimit: gasLimit
                 });
 
               case 37:
@@ -29626,33 +29612,79 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
 
               case 40:
                 _context8.next = 42;
-                return contract.buy(tokenId, amount, {
-                  value: ethers__WEBPACK_IMPORTED_MODULE_9__.parseEther(totalPrice.toString()),
-                  gasLimit: 100000
+                return contract.buy(amount, {
+                  gasLimit: gasLimit
                 });
 
               case 42:
                 buyTransaction = _context8.sent;
 
               case 43:
+                _context8.next = 65;
+                break;
+
+              case 45:
+                _gasLimit = 100000;
+                _context8.prev = 46;
+                _context8.next = 49;
+                return contract.estimateGas.buy(tokenId, amount);
+
+              case 49:
+                _estimatedGasLimit = _context8.sent;
+                _gasLimit = _estimatedGasLimit.toNumber();
+                _context8.next = 56;
+                break;
+
+              case 53:
+                _context8.prev = 53;
+                _context8.t1 = _context8["catch"](46);
+                this.logger.log('buy', 'Unable to calculate gas limit', false);
+
+              case 56:
+                if (!isPolygon) {
+                  _context8.next = 62;
+                  break;
+                }
+
+                _context8.next = 59;
+                return contract.buy(tokenId, amount, {
+                  gasLimit: _gasLimit
+                });
+
+              case 59:
+                buyTransaction = _context8.sent;
+                _context8.next = 65;
+                break;
+
+              case 62:
+                _context8.next = 64;
+                return contract.buy(tokenId, amount, {
+                  value: ethers__WEBPACK_IMPORTED_MODULE_9__.parseEther(totalPrice.toString()),
+                  gasLimit: _gasLimit
+                });
+
+              case 64:
+                buyTransaction = _context8.sent;
+
+              case 65:
                 if (!wait) {
-                  _context8.next = 47;
+                  _context8.next = 69;
                   break;
                 }
 
                 this.logger.log('buy', 'Waiting on buy transaction...');
-                _context8.next = 47;
+                _context8.next = 69;
                 return this.waitForTransaction(buyTransaction);
 
-              case 47:
+              case 69:
                 return _context8.abrupt("return", buyTransaction);
 
-              case 48:
+              case 70:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee8, this, [[24, 31], [46, 53]]);
       }));
     }
   }, {
@@ -30265,26 +30297,6 @@ var CoinbaseWalletProvider = /*#__PURE__*/function (_WalletProvider) {
         }, _callee, this);
       }));
     }
-  }, {
-    key: "addAccountChangedEventListener",
-    value: function addAccountChangedEventListener(callback) {
-      window.ethereum.on('accountsChanged', callback);
-    }
-  }, {
-    key: "addChainChangedEventListener",
-    value: function addChainChangedEventListener(callback) {
-      window.ethereum.on('chainChanged', callback);
-    }
-  }, {
-    key: "removeAccountChangedEventListener",
-    value: function removeAccountChangedEventListener(callback) {
-      window.ethereum.removeListener('accountsChanged', callback);
-    }
-  }, {
-    key: "removeChainChangedEventListener",
-    value: function removeChainChangedEventListener(callback) {
-      window.ethereum.removeListener('chainChanged', callback);
-    }
   }]);
 
   return CoinbaseWalletProvider;
@@ -30406,26 +30418,6 @@ var MetaMaskWalletProvider = /*#__PURE__*/function (_WalletProvider) {
         }, _callee, this);
       }));
     }
-  }, {
-    key: "addAccountChangedEventListener",
-    value: function addAccountChangedEventListener(callback) {
-      window.ethereum.on('accountsChanged', callback);
-    }
-  }, {
-    key: "addChainChangedEventListener",
-    value: function addChainChangedEventListener(callback) {
-      window.ethereum.on('chainChanged', callback);
-    }
-  }, {
-    key: "removeAccountChangedEventListener",
-    value: function removeAccountChangedEventListener(callback) {
-      window.ethereum.removeListener('accountsChanged', callback);
-    }
-  }, {
-    key: "removeChainChangedEventListener",
-    value: function removeChainChangedEventListener(callback) {
-      window.ethereum.removeListener('chainChanged', callback);
-    }
   }]);
 
   return MetaMaskWalletProvider;
@@ -30545,45 +30537,24 @@ var WalletConnecProvider = /*#__PURE__*/function (_WalletProvider) {
                   },
                   chainId: this.config.networkChain
                 });
-                this.provider = walletConnectProvider;
-                _context.next = 5;
+                _context.next = 4;
                 return walletConnectProvider.enable();
 
-              case 5:
+              case 4:
                 return _context.abrupt("return", new ethers__WEBPACK_IMPORTED_MODULE_2__.Web3Provider(walletConnectProvider));
 
-              case 8:
-                _context.prev = 8;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
                 this.logger.log('getProvider', 'Unable to connect to WalletConnect', true);
 
-              case 11:
+              case 10:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 7]]);
       }));
-    }
-  }, {
-    key: "addAccountChangedEventListener",
-    value: function addAccountChangedEventListener(callback) {
-      this.provider.on('accountsChanged', callback);
-    }
-  }, {
-    key: "addChainChangedEventListener",
-    value: function addChainChangedEventListener(callback) {
-      this.provider.on('chainChanged', callback);
-    }
-  }, {
-    key: "removeAccountChangedEventListener",
-    value: function removeAccountChangedEventListener(callback) {
-      this.provider.removeListener('accountsChanged', callback);
-    }
-  }, {
-    key: "removeChainChangedEventListener",
-    value: function removeChainChangedEventListener(callback) {
-      this.provider.removeListener('chainChanged', callback);
     }
   }]);
 
@@ -30697,8 +30668,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
-var stylesheet = "\n    <style>\n        #hm-overlay {\n            background: rgba(0,0,0,.5);\n            bottom: 0;\n            display: flex;\n            align-items: flex-end;\n            justify-content: center;\n            color: #FFF;\n            font-family: 'Helvetica', 'Arial', sans-serif;\n            font-size: 18px;\n            left: 0;\n            position: fixed;\n            right: 0;\n            top: 0;\n            visibility: hidden;\n            opacity: 0;\n            z-index: 1000;\n            transition: all .15s ease-in;\n        }\n\n        #hm-overlay.hm-overlay--active {\n            visibility: visible;\n            opacity: 1;\n        }\n\n        #hm-dialog {\n            background: #2B2B2B;\n            width: 100%;\n            z-index: 100;\n            border-top-left-radius: 20px;\n            border-top-right-radius: 20px;\n            padding: 24px 24px 60px 24px;\n            visibility: hidden;\n            opacity: 0;\n            transform: translateY(100px);\n            transition: all .2s ease-in;\n        }\n\n        #hm-dialog.hm-dialog--active {\n            visibility: visible;\n            opacity: 1;\n            transform: translateY(0px);\n        }\n\n        .hm-dialog-header {\n            padding-bottom: 24px;\n            position: relative;\n            font-size: 20px;\n        }\n\n        .hm-dialog-header-title {\n            font-size: 22px;\n            margin: 0;\n            text-align: center;\n            font-weight: 400;\n        }\n\n        #hm-dialog-header-close {\n            align-items: center;\n            cursor: pointer;\n            display: flex;\n            justify-content: center;\n            height: 20px;\n            width: 20px;\n            opacity: 0.5;\n            position: absolute;\n            right: 0;\n            top: 0;\n            transition: all .15s ease-in;\n        }\n\n        #hm-dialog-header-close:hover {\n            opacity: 1;\n        }\n\n        .hm-wallets {\n            margin-bottom: 20px;\n        }\n\n        .hm-wallet,\n        .hm-payment-provider {\n            border: 1px solid #3D3D3D;\n            border-radius: 16px;\n            display: flex;\n            align-items: center;\n            padding: 16px;\n            justify-content: space-between;\n            cursor: pointer;\n            margin-bottom: 12px;\n            background: transparent;\n            transition: background .15s ease-in-out;\n        }\n\n        .hm-wallet:hover,\n        .hm-payment-provider:hover {\n            background: #3D3D3D;\n        }\n\n        .hm-wallet-logo img,\n        .hm-payment-provider-logo img {\n            width: 32px;\n            height: 32px;\n        }\n\n        .hm-dialog-close-line {\n            height: 100%;\n            width: 2px;\n            background-color: white;\n            transform: rotate(135deg) translateY(-2px);\n        }\n\n        .hm-dialog-close-line--last {\n            transform: rotate(-135deg) translate(-1px, -1px);\n        }\n\n        .hm-wallet-divider {\n            border: 1px solid #3D3D3D;\n        }\n\n        .hm-payment-providers {\n            margin: 20px 0px;\n        }\n\n        @media screen and (min-width: 440px) {\n            #hm-overlay {\n                align-items: center;\n            }\n\n            #hm-dialog {\n                border-radius: 16px;\n                max-width: 350px;\n                padding: 24px;\n                transform: translateY(30px);\n            }\n        }\n    </style>\n";
-var html = "\n    <div id=\"hm-overlay\">\n        <div id=\"hm-dialog\">\n            <div class=\"hm-dialog-header\">\n                <h2 class=\"hm-dialog-header-title\">Connect Wallet</h2>\n                <div id=\"hm-dialog-header-close\">\n                    <span class=\"hm-dialog-close-line\"></span>\n                    <span class=\"hm-dialog-close-line hm-dialog-close-line--last\"></span>\n                </div>\n            </div>\n\n            <div class=\"hm-wallets\">\n                <div class=\"hm-wallet\" data-wallet=\"".concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.Metamask, "\">\n                    <div class=\"hm-wallet-name\">MetaMask</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/metamask.png\" alt=\"MetaMask\"/></div>\n                </div>\n\n                <div class=\"hm-wallet\" data-wallet=\"").concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.Coinbase, "\">\n                    <div class=\"hm-wallet-name\">Coinbase Wallet</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/coinbase.png\" alt=\"Coinbase Wallet\"/></div>\n                </div>\n\n                <div class=\"hm-wallet\" data-wallet=\"").concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.WalletConnect, "\">\n                    <div class=\"hm-wallet-name\">WalletConnect</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/walletconnect.svg\" alt=\"WalletConnect\"/></div>\n                </div>\n            </div>\n\n            <hr class=\"hm-wallet-divider\" />\n\n            <div class=\"hm-payment-providers\">\n                <div class=\"hm-dialog-header\">\n                    <h2 class=\"hm-dialog-header-title\">Buy with Card</h2>\n                </div>\n\n                <div class=\"hm-payment-provider\" data-provider=\"moonpay\">\n                    <div class=\"hm-payment-provider-name\">MoonPay</div>\n                    <div class=\"hm-payment-provider-logo\"><img src=\"https://hypermint.com/client-sdk/resources/moonpay.svg\" alt=\"MoonPay\"/></div>\n                </div>\n            </div>\n        </div>\n    </div>\n");
+var walletSelectorStylesheet = "\n    <style>\n        #hm-overlay {\n            background: rgba(0,0,0,.5);\n            bottom: 0;\n            display: flex;\n            align-items: flex-end;\n            justify-content: center;\n            color: #FFF;\n            font-family: 'Helvetica', 'Arial', sans-serif;\n            font-size: 18px;\n            left: 0;\n            position: fixed;\n            right: 0;\n            top: 0;\n            visibility: hidden;\n            opacity: 0;\n            z-index: 1000;\n            transition: all .15s ease-in;\n        }\n\n        #hm-overlay.hm-overlay--active {\n            visibility: visible;\n            opacity: 1;\n        }\n\n        #hm-dialog {\n            background: #2B2B2B;\n            width: 100%;\n            z-index: 100;\n            border-top-left-radius: 20px;\n            border-top-right-radius: 20px;\n            padding: 24px 24px 60px 24px;\n            visibility: hidden;\n            opacity: 0;\n            transform: translateY(100px);\n            transition: all .2s ease-in;\n        }\n\n        #hm-dialog.hm-dialog--active {\n            visibility: visible;\n            opacity: 1;\n            transform: translateY(0px);\n        }\n\n        .hm-dialog-header {\n            padding-bottom: 24px;\n            position: relative;\n            font-size: 20px;\n        }\n\n        .hm-dialog-header-title {\n            font-size: 22px;\n            margin: 0;\n            text-align: center;\n            font-weight: 400;\n        }\n\n        #hm-dialog-header-close {\n            align-items: center;\n            cursor: pointer;\n            display: flex;\n            justify-content: center;\n            height: 20px;\n            width: 20px;\n            opacity: 0.5;\n            position: absolute;\n            right: 0;\n            top: 0;\n            transition: all .15s ease-in;\n        }\n\n        #hm-dialog-header-close:hover {\n            opacity: 1;\n        }\n\n        .hm-wallets {\n            margin-bottom: 20px;\n        }\n\n        .hm-wallet,\n        .hm-payment-provider {\n            border: 1px solid #3D3D3D;\n            border-radius: 16px;\n            display: flex;\n            align-items: center;\n            padding: 16px;\n            justify-content: space-between;\n            cursor: pointer;\n            margin-bottom: 12px;\n            background: transparent;\n            transition: background .15s ease-in-out;\n        }\n\n        .hm-wallet:hover,\n        .hm-payment-provider:hover {\n            background: #3D3D3D;\n        }\n\n        .hm-wallet-logo img,\n        .hm-payment-provider-logo img {\n            width: 32px;\n            height: 32px;\n        }\n\n        .hm-dialog-close-line {\n            height: 100%;\n            width: 2px;\n            background-color: white;\n            transform: rotate(135deg) translateY(-2px);\n        }\n\n        .hm-dialog-close-line--last {\n            transform: rotate(-135deg) translate(-1px, -1px);\n        }\n\n        .hm-wallet-divider {\n            border: 1px solid #3D3D3D;\n        }\n\n        .hm-payment-providers {\n            margin: 20px 0px;\n        }\n\n        @media screen and (min-width: 440px) {\n            #hm-overlay {\n                align-items: center;\n            }\n\n            #hm-dialog {\n                border-radius: 16px;\n                max-width: 350px;\n                padding: 24px;\n                transform: translateY(30px);\n            }\n        }\n    </style>\n";
+var walletSelectorHtml = "\n    <div id=\"hm-overlay\">\n        <div id=\"hm-dialog\">\n            <div class=\"hm-dialog-header\">\n                <h2 class=\"hm-dialog-header-title\">Connect Wallet</h2>\n                <div id=\"hm-dialog-header-close\">\n                    <span class=\"hm-dialog-close-line\"></span>\n                    <span class=\"hm-dialog-close-line hm-dialog-close-line--last\"></span>\n                </div>\n            </div>\n\n            <div class=\"hm-wallets\">\n                <div class=\"hm-wallet\" data-wallet=\"".concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.Metamask, "\">\n                    <div class=\"hm-wallet-name\">MetaMask</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/metamask.png\" alt=\"MetaMask\"/></div>\n                </div>\n\n                <div class=\"hm-wallet\" data-wallet=\"").concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.Coinbase, "\">\n                    <div class=\"hm-wallet-name\">Coinbase Wallet</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/coinbase.png\" alt=\"Coinbase Wallet\"/></div>\n                </div>\n\n                <div class=\"hm-wallet\" data-wallet=\"").concat(_types_Enums__WEBPACK_IMPORTED_MODULE_0__.WalletProvider.WalletConnect, "\">\n                    <div class=\"hm-wallet-name\">WalletConnect</div>\n                    <div class=\"hm-wallet-logo\"><img src=\"https://hypermint.com/client-sdk/resources/walletconnect.svg\" alt=\"WalletConnect\"/></div>\n                </div>\n            </div>\n        </div>\n    </div>\n");
 var WalletSelector = /*#__PURE__*/function () {
   function WalletSelector() {
     _classCallCheck(this, WalletSelector);
@@ -30707,7 +30678,12 @@ var WalletSelector = /*#__PURE__*/function () {
   _createClass(WalletSelector, null, [{
     key: "init",
     value: function init() {
-      document.body.insertAdjacentHTML('beforeend', html + stylesheet);
+      var overlay = document.getElementById('hm-overlay');
+      var dialog = document.getElementById('hm-dialog');
+
+      if (!overlay || !dialog) {
+        document.body.insertAdjacentHTML('beforeend', walletSelectorHtml + walletSelectorStylesheet);
+      }
     }
   }, {
     key: "selectWallet",

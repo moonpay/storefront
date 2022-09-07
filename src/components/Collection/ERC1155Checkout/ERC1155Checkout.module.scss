@@ -1,3 +1,54 @@
+.hero {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-grow: 1;
+    padding-bottom: 150px;
+    position: relative;
+
+    &::before {
+        background: linear-gradient(to bottom, rgba(var(--color-black),1) 10%, rgba(var(--color-black),0.75) 65%, rgba(var(--color-black),0) 100%);
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    @media screen and (min-width: 1024px) {
+        justify-content: center;
+        min-height: 850px;
+        padding-bottom: 0;
+    }
+}
+
+.heroContainer {
+    align-items: flex-start;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.heroContent {
+    @media screen and (min-width: 768px) {
+        max-width: 70%;
+    }
+}
+
+
+.main {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    margin-bottom: var(--spacing-xxlarge);
+    margin-top: -150px;
+}
+
 .grid {
     display: grid;
     gap: var(--spacing-xxlarge);
