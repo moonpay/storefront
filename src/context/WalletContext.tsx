@@ -1,4 +1,5 @@
 import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import { IWalletContext, IWalletProvider } from '../types/context/IWalletContext';
 import { IWalletBalance } from '../types/HyperMint/IWallet';
 import EVMWalletHelpers from '../utils/EVMWalletHelpers';
@@ -54,6 +55,28 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
 
     useEffect(() => {
         getConnectedWallet();
+
+        const onHandleWalletChainChanged = async ({ detail }: any) => {
+            if (!detail.isSupported) {
+                // TODO: add toast error type
+                toast('Selected chain is not supported');
+                await disconnect();
+                await connect();
+            }
+        };
+
+        const onHandleWalletAccountChanged = async (e: any) => {
+            await disconnect();
+            await connect();
+        };
+
+        window.addEventListener('hmWalletChainChanged', onHandleWalletChainChanged);
+        window.addEventListener('hmWalletAccountChanged', onHandleWalletAccountChanged);
+
+        return () => {
+            window.removeEventListener('hmWalletChainChanged', onHandleWalletChainChanged);
+            window.removeEventListener('hmWalletAccountChanged', onHandleWalletAccountChanged);
+        };
     }, []);
 
     return (

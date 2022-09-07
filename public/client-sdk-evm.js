@@ -30124,7 +30124,7 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
             switch (_context15.prev = _context15.next) {
               case 0:
                 this.ethereumProvider.on('chainChanged', this.onWalletChainChanged.bind(this));
-                this.ethereumProvider.on('accountsChanged', this.connect.bind(this));
+                this.ethereumProvider.on('accountsChanged', this.onAccountChanged.bind(this));
 
               case 2:
               case "end":
@@ -30143,7 +30143,7 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
             switch (_context16.prev = _context16.next) {
               case 0:
                 this.ethereumProvider.removeListener('chainChanged', this.onWalletChainChanged.bind(this));
-                this.ethereumProvider.removeListener('accountsChanged', this.connect.bind(this));
+                this.ethereumProvider.removeListener('accountsChanged', this.onAccountChanged.bind(this));
 
               case 2:
               case "end":
@@ -30157,25 +30157,56 @@ var EVMContract = /*#__PURE__*/function (_BaseContract) {
     key: "onWalletChainChanged",
     value: function onWalletChainChanged(chainId) {
       return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
-        var chainIdDecimal;
+        var chainIdDecimal, isSupported, event;
         return _regeneratorRuntime().wrap(function _callee17$(_context17) {
           while (1) {
             switch (_context17.prev = _context17.next) {
               case 0:
                 chainIdDecimal = parseInt(chainId, 16);
+                isSupported = chainIdDecimal === this.config.networkChain;
 
-                if (chainIdDecimal !== this.config.networkChain) {
-                  this.logger.log('changeChain', 'Chain is unsupported', true);
+                if (!isSupported) {
+                  this.logger.log('changeChain', 'Chain is unsupported');
                 }
 
-                this.connect();
+                event = new CustomEvent('hmWalletChainChanged', {
+                  detail: {
+                    chainId: chainId,
+                    isSupported: isSupported
+                  }
+                });
+                window.dispatchEvent(event);
 
-              case 3:
+              case 5:
               case "end":
                 return _context17.stop();
             }
           }
         }, _callee17, this);
+      }));
+    }
+  }, {
+    key: "onAccountChanged",
+    value: function onAccountChanged(accounts) {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee18() {
+        var event;
+        return _regeneratorRuntime().wrap(function _callee18$(_context18) {
+          while (1) {
+            switch (_context18.prev = _context18.next) {
+              case 0:
+                event = new CustomEvent('hmWalletAccountChanged', {
+                  detail: {
+                    accounts: accounts
+                  }
+                });
+                window.dispatchEvent(event);
+
+              case 2:
+              case "end":
+                return _context18.stop();
+            }
+          }
+        }, _callee18);
       }));
     }
   }]);
@@ -30271,30 +30302,51 @@ var CoinbaseWalletProvider = /*#__PURE__*/function (_WalletProvider) {
   _createClass(CoinbaseWalletProvider, [{
     key: "getWeb3Provider",
     value: function getWeb3Provider() {
-      var _a;
+      var _a, _b;
 
-      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var _this = this;
+
         var coinbaseProvider;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                coinbaseProvider = (_a = window.ethereum) === null || _a === void 0 ? void 0 : _a.providers.find(function (x) {
-                  return x.isCoinbaseWallet;
-                });
+                coinbaseProvider = window === null || window === void 0 ? void 0 : window.ethereum;
+
+                if ((_b = (_a = window === null || window === void 0 ? void 0 : window.ethereum) === null || _a === void 0 ? void 0 : _a.providers) === null || _b === void 0 ? void 0 : _b.length) {
+                  window.ethereum.providers.forEach(function (p) {
+                    return __awaiter(_this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+                      return _regeneratorRuntime().wrap(function _callee$(_context) {
+                        while (1) {
+                          switch (_context.prev = _context.next) {
+                            case 0:
+                              if (p.isCoinbaseWallet) {
+                                coinbaseProvider = p;
+                              }
+
+                            case 1:
+                            case "end":
+                              return _context.stop();
+                          }
+                        }
+                      }, _callee);
+                    }));
+                  });
+                }
 
                 if (!coinbaseProvider) {
                   this.logger.log('getProvider', 'Coinbase wallet not found', true);
                 }
 
-                return _context.abrupt("return", new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(coinbaseProvider));
+                return _context2.abrupt("return", new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(coinbaseProvider));
 
-              case 3:
+              case 4:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
     }
   }]);
@@ -30392,30 +30444,51 @@ var MetaMaskWalletProvider = /*#__PURE__*/function (_WalletProvider) {
   _createClass(MetaMaskWalletProvider, [{
     key: "getWeb3Provider",
     value: function getWeb3Provider() {
-      var _a;
+      var _a, _b;
 
-      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var _this = this;
+
         var metamaskProvider;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                metamaskProvider = (_a = window.ethereum) === null || _a === void 0 ? void 0 : _a.providers.find(function (x) {
-                  return x.isMetaMask;
-                });
+                metamaskProvider = window === null || window === void 0 ? void 0 : window.ethereum;
+
+                if ((_b = (_a = window === null || window === void 0 ? void 0 : window.ethereum) === null || _a === void 0 ? void 0 : _a.providers) === null || _b === void 0 ? void 0 : _b.length) {
+                  window.ethereum.providers.forEach(function (p) {
+                    return __awaiter(_this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+                      return _regeneratorRuntime().wrap(function _callee$(_context) {
+                        while (1) {
+                          switch (_context.prev = _context.next) {
+                            case 0:
+                              if (p.isMetaMask) {
+                                metamaskProvider = p;
+                              }
+
+                            case 1:
+                            case "end":
+                              return _context.stop();
+                          }
+                        }
+                      }, _callee);
+                    }));
+                  });
+                }
 
                 if (!metamaskProvider) {
                   this.logger.log('getProvider', 'MetaMask wallet not found', true);
                 }
 
-                return _context.abrupt("return", new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(metamaskProvider));
+                return _context2.abrupt("return", new ethers__WEBPACK_IMPORTED_MODULE_1__.Web3Provider(metamaskProvider));
 
-              case 3:
+              case 4:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
     }
   }]);
