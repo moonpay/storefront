@@ -6,6 +6,7 @@ import ERC721Checkout from '../../components/Collection/ERC721Checkout';
 import { IToken } from '../../types/HyperMint/IToken';
 import ERC1155Checkout from '../../components/Collection/ERC1155Checkout';
 import { NFTContractType } from '../../types/HyperMint/IContract';
+import Header from '../../components/Layout/Header';
 
 const StoreFront: FC = () => {
     const { nftContract, hyperMintContract } = useContext(ContractContext);
@@ -13,6 +14,7 @@ const StoreFront: FC = () => {
     const [publicSaleLive, setPublicSaleLive] = useState(false);
     const [privateSaleLive, setPrivateSaleLive] = useState(false);
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
+    const [totalMintedTokens, setTotalMintedTokens] = useState<number>();
     const [contractTokens, setContractTokens] = useState<any[]>();
 
     const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
@@ -43,6 +45,10 @@ const StoreFront: FC = () => {
         if ((contractTokens as any).error) {
             setContractTokens(undefined);
         }
+
+        setTotalMintedTokens(
+            contractTokens.reduce((prev, cur) => prev + cur.supply, 0)
+        );
 
         // TODO: add type
         const tokensWithData = contractIsERC721
@@ -94,24 +100,25 @@ const StoreFront: FC = () => {
                 reverseOrder={false}
             />
 
+            <Header
+                publicSaleLive={publicSaleLive}
+                privateSaleLive={privateSaleLive}
+                privateSaleDate={privateSaleDate}
+                setPublicSaleLive={setPublicSaleLive}
+                setPrivateSaleLive={setPrivateSaleLive}
+                totalMintedTokens={totalMintedTokens}
+            />
+
             {contractIsERC721 ? (
                 <ERC721Checkout
                     token={contractTokens ? contractTokens[0] : undefined}
                     publicSaleLive={publicSaleLive}
-                    privateSaleLive={privateSaleLive}
-                    privateSaleDate={privateSaleDate}
-                    setPublicSaleLive={setPublicSaleLive}
-                    setPrivateSaleLive={setPrivateSaleLive}
                 />
             ) : (
                 <ERC1155Checkout
                     onSuccessfulPurchase={getContractTokens}
                     tokens={contractTokens ?? []}
                     publicSaleLive={publicSaleLive}
-                    privateSaleLive={privateSaleLive}
-                    privateSaleDate={privateSaleDate}
-                    setPublicSaleLive={setPublicSaleLive}
-                    setPrivateSaleLive={setPrivateSaleLive}
                 />
             )}
         </>

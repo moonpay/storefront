@@ -49,6 +49,7 @@ export interface INFTContract {
     publicSaleAt?: Date;
     saleClosesAt?: Date;
     erc721Price?: number;
+    tokenCount: number;
     erc721MaxPerTransaction?: number;
     whitelists: INFTContractWhitelist[];
     metadata: {
