@@ -1,3 +1,51 @@
+.hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+    &::before {
+        background: linear-gradient(to bottom, rgba(var(--color-black),1) 10%, rgba(var(--color-black),0.75) 65%, rgba(var(--color-black),0) 100%);
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    @media screen and (min-width: 1024px) {
+        justify-content: center;
+    }
+}
+
+.heroGrid {
+    align-items: center;
+    display: grid;
+    gap: var(--spacing-xxlarge);
+    position: relative;
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 1280px) {
+        gap: calc(var(--spacing-xxlarge) * 5);
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+}
+
 .limiter {
     max-width: 400px;
 

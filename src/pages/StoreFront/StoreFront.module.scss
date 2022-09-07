@@ -5,34 +5,6 @@
     min-height: 100vh;
     width: 100vw;
 }
-
-.hero {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    min-height: 850px;
-    flex-grow: 1;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-
-    &::before {
-        background: linear-gradient(to bottom, rgba(var(--color-black),1) 10%, rgba(var(--color-black),0.75) 65%, rgba(var(--color-black),0) 100%);
-        bottom: 0;
-        content: '';
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-
-    @media screen and (min-width: 1024px) {
-        justify-content: center;
-    }
-}
-
 .erc1155Hero {
     height: 100vh;
     max-height: 1200px;
@@ -53,12 +25,4 @@
         gap: calc(var(--spacing-xxlarge) * 5);
         grid-template-columns: 1fr 1fr;
     }
-}
-
-.main {
-    align-items: center;
-    display: flex;
-    flex-grow: 1;
-    margin-top: -150px;
-    margin-bottom: var(--spacing-xxlarge);
 }

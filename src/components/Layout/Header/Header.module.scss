@@ -2,13 +2,6 @@
     background-color: rgb(var(--color-black));
     position: relative;
     z-index: 1;
-
-    @media screen and (min-width: 1024px) {
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-    }
 }
 
 .headerContainer {
