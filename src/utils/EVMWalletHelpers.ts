@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import abbreviate from 'number-abbreviate';
 import { INFTContract , NetworkType } from '../types/HyperMint/IContract';
 import NetworkHelpers from './NetworkHelpers';
 
@@ -21,6 +18,13 @@ export default class EVMWalletHelpers {
 
         const symbol = contract ? NetworkHelpers.getSymbolForNetwork(contract.network.type as NetworkType) : 'ETH';
 
-        return `${abbreviate(formattedBalance, 2)} ${symbol}`;
+        const formatter = new Intl.NumberFormat('en-GB', {
+            notation: 'compact',
+            compactDisplay: 'short',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+
+        return `${formatter.format(Number(formattedBalance))} ${symbol}`;
     }
 }
