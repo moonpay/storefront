@@ -31,7 +31,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
         const saleHasClosed = saleClosesAt ? saleClosesAt < new Date() : false;
 
         return saleHasClosed || Number(totalMintedTokens) === Number(nftContract?.tokenCount ?? 0);
-    }, [saleClosesAt]);
+    }, [saleClosesAt, nftContract, totalMintedTokens]);
 
     return (
         <header className={styles.header}>
