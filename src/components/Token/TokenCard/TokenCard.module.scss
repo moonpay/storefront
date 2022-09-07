@@ -1,16 +1,32 @@
 .card {
-    backdrop-filter: blur(24px);
-    background: rgba(255,255,255,0.06);
     border-radius: var(--border-radius-regular);
     border: 1px solid rgba(var(--color-primary), 0.3);
+    overflow: hidden;
     padding: var(--spacing-xlarge);
+    position: relative;
+
+    &::before {
+        backdrop-filter: blur(24px);
+        background: rgba(255,255,255,0.06);
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}
+
+.cardInner {
+    position: relative;
 }
 
 .header {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: space-between;
     margin-bottom: var(--spacing-large);
+    position: relative;
 }
 
 .title {
@@ -25,20 +41,20 @@
 }
 
 .remainingCounter {
-    position: absolute;
     background: rgba(var(--color-black), 0.3);
-    padding: var(--spacing-xsmall);
     border-radius: var(--border-radius-regular);
-    color: rgb(var(--color-white));
     bottom: var(--spacing-small);
+    color: rgb(var(--color-white));
+    padding: var(--spacing-xsmall);
+    position: absolute;
     right: var(--spacing-small);
 }
 
 .image {
+    border-radius: var(--border-radius-regular);
     height: 300px;
     object-fit: cover;
     width: 100%;
-    border-radius: var(--border-radius-regular);
 }
 
 .form {
@@ -95,4 +111,9 @@
 
 .modalHeader {
     margin-top: 0;
+}
+
+.purchaseButtons {
+    display: grid;
+    gap: var(--spacing-regular)
 }

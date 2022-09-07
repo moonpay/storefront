@@ -9,6 +9,7 @@ import { WalletContext } from '../../../context/WalletContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
 import Modal from '../../Common/Modal';
 import { ContentContext } from '../../../context/ContentContext';
+import BuyWithCardButton from '../BuyWithCardButton';
 import styles from './TokenCard.module.scss';
 
 interface ITokenCard {
@@ -189,76 +190,87 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
             )}
 
             <article className={styles.card}>
-                <header className={styles.header}>
-                    <h4 className={styles.title}>{token?.name}</h4>
+                <div className={styles.cardInner}>
+                    <header className={styles.header}>
+                        <h4 className={styles.title}>{token?.name}</h4>
 
-                    <div
-                        tabIndex={0}
-                        onClick={() => setShowingDetails(!showingDetails)}
-                        className={styles.infoIcon}
-                    >
-                        <img src={require('../../../assets/icons/info.png')} />
-                    </div>
-                </header>
+                        <div
+                            tabIndex={0}
+                            onClick={() => setShowingDetails(!showingDetails)}
+                            className={styles.infoIcon}
+                        >
+                            <img src={require('../../../assets/icons/info.png')} />
+                        </div>
+                    </header>
 
-                <main>
-                    <div className={styles.imageWrap}>
-                        <img
-                            src={token?.image}
-                            className={styles.image}
-                        />
-
-                        {token.remaining !== undefined && (
-                            <div className={styles.remainingCounter}>
-                                <p>{token.remaining} left</p>
-                            </div>
-                        )}
-                    </div>
-
-                    {canPurchase && (
-                        <div className={styles.form}>
-                            <TokenAllocationBreakdown
-                                allocation={allocation}
-                                setShowBreakdown={setShowBreakdown}
-                                showBreakdown={showBreakdown}
+                    <main>
+                        <div className={styles.imageWrap}>
+                            <img
+                                src={token?.image}
+                                className={styles.image}
                             />
 
-                            <form onSubmit={e => e.preventDefault()}>
-                                <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
-                                    <div className={styles.inputHeader}>
-                                        <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
+                            {token.remaining !== undefined && (
+                                <div className={styles.remainingCounter}>
+                                    <p>{token.remaining} left</p>
+                                </div>
+                            )}
+                        </div>
 
-                                        {maxAllocation > 0 && (
-                                            <span className={styles.inputContent}>Max. {maxAllocation}</span>
+                        {canPurchase && (
+                            <div className={styles.form}>
+                                <TokenAllocationBreakdown
+                                    allocation={allocation}
+                                    setShowBreakdown={setShowBreakdown}
+                                    showBreakdown={showBreakdown}
+                                />
+
+                                <form onSubmit={e => e.preventDefault()}>
+                                    <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
+                                        <div className={styles.inputHeader}>
+                                            <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
+
+                                            {maxAllocation > 0 && (
+                                                <span className={styles.inputContent}>Max. {maxAllocation}</span>
+                                            )}
+                                        </div>
+
+                                        <div className={styles.inputWrap}>
+                                            <input
+                                                type="number"
+                                                id="quantity"
+                                                name="quantity"
+                                                value={quantity.toString()}
+                                                className={`${styles.input} ${inputHasError && styles.inputError}`}
+                                                onChange={e => setQuantity(Number(e.target.value))}
+                                                min={1}
+                                                max={maxAllocation && maxAllocation > 0 ? maxAllocation : undefined}
+                                                disabled={token.remaining === 0}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.purchaseButtons}>
+                                        <TokenPurchaseButton
+                                            total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
+                                            onPurchase={onPurchase}
+                                            purchasing={purchasing}
+                                            disabled={inputHasError}
+                                            soldOut={token.remaining === 0}
+                                        />
+
+                                        {nftContract?.allowBuyWithMoonPay && token.remaining > 0 && (
+                                            <BuyWithCardButton
+                                                tokenId={Number(token.id)}
+                                                disabled={inputHasError}
+                                            />
                                         )}
                                     </div>
-
-                                    <div className={styles.inputWrap}>
-                                        <input
-                                            type="number"
-                                            id="quantity"
-                                            name="quantity"
-                                            value={quantity.toString()}
-                                            className={`${styles.input} ${inputHasError && styles.inputError}`}
-                                            onChange={e => setQuantity(Number(e.target.value))}
-                                            min={1}
-                                            max={maxAllocation && maxAllocation > 0 ? maxAllocation : undefined}
-                                            disabled={token.remaining === 0}
-                                        />
-                                    </div>
-                                </div>
-
-                                <TokenPurchaseButton
-                                    total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
-                                    onPurchase={onPurchase}
-                                    purchasing={purchasing}
-                                    disabled={inputHasError}
-                                    soldOut={token.remaining === 0}
-                                />
-                            </form>
-                        </div>
-                    )}
-                </main>
+                                </form>
+                            </div>
+                        )}
+                    </main>
+                </div>
             </article>
         </>
     );

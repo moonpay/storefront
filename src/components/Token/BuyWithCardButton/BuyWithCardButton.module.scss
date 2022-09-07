@@ -1,8 +1,9 @@
 .button {
     appearance: none;
-    background-color: rgb(var(--color-primary));
-    border: 0;
+    background-color: transparent;
     border-radius: var(--border-radius-large);
+    border: 2px solid rgb(var(--color-primary));
+    color: rgb(var(--color-primary));
     cursor: pointer;
     font-family: Luna;
     font-size: var(--font-size-h2);
@@ -12,6 +13,8 @@
     width: 100%;
 }
 
-.soldOutButton {
-    cursor: not-allowed;
+.moonPayFrame {
+    border: 0;
+    height: 100vh;
+    max-height: 600px;
 }
