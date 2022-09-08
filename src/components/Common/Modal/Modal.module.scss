@@ -7,42 +7,36 @@
 }
 
 .modalWrap {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(var(--color-black),0.75);
-    display: flex;
     align-items: center;
+    background-color: rgba(var(--color-black),0.75);
+    bottom: 0;
+    display: flex;
     justify-content: center;
-    padding: var(--spacing-regular);
+    left: 0;
     opacity: 1;
+    padding: var(--spacing-regular);
+    position: fixed;
+    right: 0;
+    top: 0;
     z-index: 100000;
 }
 
-.modalClose {
-    position: absolute;
-    top: var(--spacing-large);
-    right: var(--spacing-regular);
-}
-
 .modalHeaderWrap {
-    display: flex;
     align-items: center;
+    display: flex;
     justify-content: space-between;
-    margin-bottom: var(--spacing-small);
+    margin-bottom: var(--spacing-xlarge);
 }
 
 .modal {
-    opacity: 0;
-    transform: translateY(20px);
-    visibility: hidden;
-    transition: all .3s ease-in-out;
     background-color: rgb(var(--color-white));
     border-radius: var(--border-radius-regular);
-    padding: var(--spacing-large) var(--spacing-xxlarge);
     max-width: 564px;
+    opacity: 0;
+    padding: var(--spacing-large) var(--spacing-xxlarge);
+    transform: translateY(20px);
+    transition: all .3s ease-in-out;
+    visibility: hidden;
 }
 
 .modalActive {
@@ -57,4 +51,5 @@
 
 .closeIcon {
     cursor: pointer;
+    margin-left: auto;
 }

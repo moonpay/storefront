@@ -180,9 +180,9 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                 <Modal
                     isOpen={showingDetails}
                     onClose={() => setShowingDetails(false)}
+                    header={<h2 className={styles.modalHeader}>{token.name} Description</h2>}
                     content={
                         <div>
-                            <h2 className={styles.modalHeader}>{token.name} Description</h2>
                             <p className={styles.modalDescription}>{token.description}</p>
                         </div>
                     }
