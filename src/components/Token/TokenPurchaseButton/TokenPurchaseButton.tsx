@@ -25,7 +25,7 @@ const TokenPurchaseButton: FC<ITokenPurchaseButton> = ({ total, onPurchase, purc
             onClick={onPurchase}
             disabled={disabled || purchasing}
         >
-            {purchasing ? <Loading /> : `${total} | Buy`}
+            {purchasing ? <Loading light /> : `${total} | Buy`}
         </button>
     );
 };
