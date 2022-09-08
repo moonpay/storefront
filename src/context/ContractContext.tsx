@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { createContext, FC, useEffect, useMemo, useState } from 'react';
+import { createContext, FC, useContext, useEffect, useMemo, useState } from 'react';
 import PreDeploymentPage from '../pages/PreDeploymentPage';
 import { ConfigType } from '../types/Config';
+import { AppComponents } from '../types/context/IAppContext';
 import { IContractContext, IContractProvider } from '../types/context/IContractContext';
 import { IHyperMintContract, INFTContract } from '../types/HyperMint/IContract';
 import ConfigurationImporter from '../utils/ConfigurationImporter';
+import { AppContext } from './AppContext';
 
 // @ts-ignore
 const { Contract } = HyperMint;
@@ -13,6 +15,7 @@ export const ContractContext = createContext<IContractContext>({} as IContractCo
 
 const contractConfig = (new ConfigurationImporter()).loadConfig(ConfigType.CONTRACT);
 export const ContractProvider: FC<IContractProvider> = ({ children }) => {
+    const appContext = useContext(AppContext);
     const [loading, setLoading] = useState(false);
     const [nftContract, setNftContract] = useState<INFTContract>();
     const hyperMintContract = useMemo<IHyperMintContract>(() => {
@@ -40,6 +43,11 @@ export const ContractProvider: FC<IContractProvider> = ({ children }) => {
                 }
 
                 setNftContract(contractInfo);
+
+                appContext.setLoadedComponents([
+                    ...appContext?.loadedComponents ?? [],
+                    AppComponents.Contract
+                ]);
             } catch (e) {
                 setNftContract(undefined);
             }

@@ -7,8 +7,18 @@ import { IToken } from '../../types/HyperMint/IToken';
 import ERC1155Checkout from '../../components/Collection/ERC1155Checkout';
 import { NFTContractType } from '../../types/HyperMint/IContract';
 import Header from '../../components/Layout/Header';
+import { WalletProvider } from '../../context/WalletContext';
+import { ContentProvider } from '../../context/ContentContext';
+import ConfigurationImporter from '../../utils/ConfigurationImporter';
+import { AppContext } from '../../context/AppContext';
+import { AppComponents } from '../../types/context/IAppContext';
 
-const StoreFront: FC = () => {
+interface IStoreFront {
+    configurationImporter: ConfigurationImporter;
+}
+
+const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
+    const appContext = useContext(AppContext);
     const { nftContract, hyperMintContract } = useContext(ContractContext);
 
     const [publicSaleLive, setPublicSaleLive] = useState(false);
@@ -56,6 +66,11 @@ const StoreFront: FC = () => {
             : await Promise.all(contractTokens.map(token => getToken(token)));
 
         setContractTokens(tokensWithData);
+
+        appContext.setLoadedComponents([
+            ...appContext?.loadedComponents ?? [],
+            AppComponents.Tokens
+        ]);
     };
 
     const calculateAndSetPrivateSaleStart = () => {
@@ -94,34 +109,36 @@ const StoreFront: FC = () => {
     }, [nftContract]);
 
     return (
-        <>
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
-            />
-
-            <Header
-                publicSaleLive={publicSaleLive}
-                privateSaleLive={privateSaleLive}
-                privateSaleDate={privateSaleDate}
-                setPublicSaleLive={setPublicSaleLive}
-                setPrivateSaleLive={setPrivateSaleLive}
-                totalMintedTokens={totalMintedTokens}
-            />
-
-            {contractIsERC721 ? (
-                <ERC721Checkout
-                    token={contractTokens ? contractTokens[0] : undefined}
-                    publicSaleLive={publicSaleLive}
+        <ContentProvider configurationImporter={configurationImporter}>
+            <WalletProvider>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
                 />
-            ) : (
-                <ERC1155Checkout
-                    onSuccessfulPurchase={getContractTokens}
-                    tokens={contractTokens ?? []}
+
+                <Header
                     publicSaleLive={publicSaleLive}
+                    privateSaleLive={privateSaleLive}
+                    privateSaleDate={privateSaleDate}
+                    setPublicSaleLive={setPublicSaleLive}
+                    setPrivateSaleLive={setPrivateSaleLive}
+                    totalMintedTokens={totalMintedTokens}
                 />
-            )}
-        </>
+
+                {contractIsERC721 ? (
+                    <ERC721Checkout
+                        token={contractTokens ? contractTokens[0] : undefined}
+                        publicSaleLive={publicSaleLive}
+                    />
+                ) : (
+                    <ERC1155Checkout
+                        onSuccessfulPurchase={getContractTokens}
+                        tokens={contractTokens ?? []}
+                        publicSaleLive={publicSaleLive}
+                    />
+                )}
+            </WalletProvider>
+        </ContentProvider>
     );
 };
 

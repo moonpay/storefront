@@ -1,11 +1,20 @@
 import { FC } from 'react';
+import Loading from '../../components/Common/Loading';
 import Logo from '../../components/Common/Logo';
 import styles from './LoadingPage.module.scss';
 
-const LoadingPage: FC = () => (
-    <div className={styles.wrap}>
+interface ILoadingPage {
+    hasFinishedLoading?: boolean;
+}
+
+const LoadingPage: FC<ILoadingPage> = ({ hasFinishedLoading }) => (
+    <div className={`${styles.wrap} ${hasFinishedLoading && styles.wrapLoaded}`}>
+        <Loading
+            className={styles.loadingSpinner}
+            light
+        />
+
         <Logo />
-        <p className={styles.text}>Loading...</p>
     </div>
 );
 
