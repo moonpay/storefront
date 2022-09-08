@@ -34,7 +34,7 @@ const CollectionDetails: FC = () => {
                 header={<h2 className={styles.modalHeader}>Collection Details</h2>}
                 content={
                     <div>
-                        <p className={styles.description}>{contentContext?.description}</p>
+                        <p className={styles.modalDescription}>{contentContext?.description}</p>
                     </div>
                 }
             />
