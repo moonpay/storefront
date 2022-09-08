@@ -111,6 +111,12 @@
 
 .modalHeader {
     margin-top: 0;
+    margin-bottom: var(--spacing-xlarge);
+}
+
+.modalDescription {
+    color: rgb(var(--color-off-white));
+    line-height: 1.6;
 }
 
 .purchaseButtons {

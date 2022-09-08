@@ -7,16 +7,17 @@
 .heading {
     color: rgb(var(--color-white));
     margin-top: var(--spacing-xxsmall);
+    text-transform: uppercase;
 }
 
 .subHeading {
-    color: rgb(var(--color-white));
+    color: rgb(var(--color-light-grey));
     text-transform: uppercase;
     margin-top: 0;
 }
 
 .description {
-    color: rgb(var(--color-white));
+    color: rgb(var(--color-off-white));
     line-height: 1.6;
 }
 
@@ -33,4 +34,5 @@
 
 .modalHeader {
     margin-top: 0;
+    margin-bottom: var(--spacing-xlarge);
 }

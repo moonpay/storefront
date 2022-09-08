@@ -33,8 +33,8 @@ const CollectionDetails: FC = () => {
                 onClose={() => setShowContentModal(false)}
                 content={
                     <div>
-                        <h3 className={styles.modalHeader}>Collection Details</h3>
-                        <p>{contentContext?.description}</p>
+                        <h2 className={styles.modalHeader}>Collection Details</h2>
+                        <p className={styles.description}>{contentContext?.description}</p>
                     </div>
                 }
             />

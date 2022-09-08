@@ -182,8 +182,8 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                     onClose={() => setShowingDetails(false)}
                     content={
                         <div>
-                            <h3 className={styles.modalHeader}>{token.name} Description</h3>
-                            <p>{token.description}</p>
+                            <h2 className={styles.modalHeader}>{token.name} Description</h2>
+                            <p className={styles.modalDescription}>{token.description}</p>
                         </div>
                     }
                 />

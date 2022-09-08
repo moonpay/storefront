@@ -52,7 +52,7 @@
     display: flex;
     border-radius: var(--border-radius-regular);
     background-color: rgba(255, 255, 255, 0.08);
-    padding: var(--spacing-regular);
+    padding: var(--spacing-small) var(--spacing-regular);
 }
 
 .countdownLive {
