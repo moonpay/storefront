@@ -17,7 +17,14 @@ export const ContractProvider: FC<IContractProvider> = ({ children }) => {
     const [nftContract, setNftContract] = useState<INFTContract>();
     const hyperMintContract = useMemo<IHyperMintContract>(() => {
         // TODO: fix this running twice
-        return new Contract(contractConfig);
+        const params = new URLSearchParams(document.location.search);
+        const contractParam = params.get('contract');
+        if (contractParam) {
+            return new Contract(JSON.parse(contractParam));
+        }
+        else {
+            return new Contract(contractConfig);
+        }
     }, []);
 
     useEffect(() => {
