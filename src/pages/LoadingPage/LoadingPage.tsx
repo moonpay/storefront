@@ -11,7 +11,6 @@ const LoadingPage: FC<ILoadingPage> = ({ hasFinishedLoading }) => (
     <div className={`${styles.wrap} ${hasFinishedLoading && styles.wrapLoaded}`}>
         <Loading
             className={styles.loadingSpinner}
-            light
         />
 
         <Logo />

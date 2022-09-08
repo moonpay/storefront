@@ -17,10 +17,12 @@
 
 .wrapLoaded {
     opacity: 0;
-    visibility: hidden;
+visibility: hidden;
 }
 
 .loadingSpinner {
+    border: 3px solid rgb(var(--color-primary));
+    border-bottom-color: transparent;
     height: 40px;
     margin-bottom: var(--spacing-xxlarge);
     width: 40px;

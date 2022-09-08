@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { IWalletContext, IWalletProvider } from '../types/context/IWalletContext';
 import { IWalletBalance } from '../types/HyperMint/IWallet';
 import EVMWalletHelpers from '../utils/EVMWalletHelpers';
+import Toast from '../utils/Toast';
 import { ContractContext } from './ContractContext';
 
 export const WalletContext = createContext<IWalletContext>({} as IWalletContext);
@@ -59,7 +60,7 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
         const onHandleWalletChainChanged = async ({ detail }: any) => {
             if (!detail.isSupported) {
                 // TODO: add toast error type
-                toast('Selected chain is not supported');
+                Toast.errorToast('Selected chain is not supported');
                 await disconnect();
                 await connect();
             }

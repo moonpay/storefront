@@ -10,6 +10,7 @@ import { NFTContractType } from '../../../types/HyperMint/IContract';
 import Modal from '../../Common/Modal';
 import { ContentContext } from '../../../context/ContentContext';
 import BuyWithCardButton from '../BuyWithCardButton';
+import Toast from '../../../utils/Toast';
 import styles from './TokenCard.module.scss';
 
 interface ITokenCard {
@@ -38,6 +39,8 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     const [purchasing, setIsPurchasing] = useState(false);
     const [canPurchase, setCanPurchase] = useState(false);
     const [showingDetails, setShowingDetails] = useState(false);
+
+    const isERC721Contract = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
 
     const doesWalletHaveAllocation = async (walletAddress?: string): Promise<boolean> => {
         // We pass in allocation for 721 contracts
@@ -136,7 +139,6 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         e.preventDefault();
 
         setIsPurchasing(true);
-        const styles = getComputedStyle(document.body);
 
         try {
             const method = publicSaleLive ? 'buy' : 'buyAuthorised';
@@ -145,23 +147,13 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
 
             onSuccessfulPurchase(token.id);
 
-            toast('Purchase Complete 🎉', {
-                style: {
-                    background: `rgba(${styles.getPropertyValue('--color-state-success')})`,
-                    color: `rgb(${styles.getPropertyValue('--color-white')})`
-                }
-            });
+            Toast.successToast('Purchase Complete 🎉');
         } catch (e) {
             const error = e as Error;
             const ignorableMessages = ['HM (connect) - Failed selecting wallet'];
 
             if (!ignorableMessages.includes(error.message)) {
-                toast(error.message ?? 'Purchase failed', {
-                    style: {
-                        background: `rgb(${styles.getPropertyValue('--color-state-error')})`,
-                        color: `rgb(${styles.getPropertyValue('--color-white')})`
-                    }
-                });
+                Toast.errorToast(error.message ?? 'Purchase failed');
             }
         }
 
@@ -199,7 +191,11 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                             onClick={() => setShowingDetails(!showingDetails)}
                             className={styles.infoIcon}
                         >
-                            <img src={require('../../../assets/icons/info.png')} />
+                            <img
+                                src={
+                                    require(`../../../assets/icons/${isERC721Contract ? 'question' : 'info'}.png`)
+                                }
+                            />
                         </div>
                     </header>
 

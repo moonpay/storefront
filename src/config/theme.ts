@@ -4,7 +4,7 @@ export default {
         logo: require('../assets/logo.png'),
     },
     colors: {
-        primary: '22, 230, 181',
+        primary: '125, 0, 255',
         success: '22, 230, 181',
         error: '243, 174, 165'
     }

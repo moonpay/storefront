@@ -1,6 +1,7 @@
 import { FC, useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ContractContext } from '../../../context/ContractContext';
+import Toast from '../../../utils/Toast';
 import Modal from '../../Common/Modal';
 import styles from './BuyWithCardButton.module.scss';
 
@@ -16,7 +17,7 @@ const BuyWithCardButton: FC<IBuyWithCardButton> = ({ disabled, tokenId }) => {
 
     const onPurchase = async () => {
         if (tokenId === undefined) {
-            toast('Unable to purchase');
+            Toast.errorToast('Unable to purchase');
             return;
         }
 
