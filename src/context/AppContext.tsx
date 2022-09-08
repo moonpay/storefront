@@ -5,14 +5,20 @@ import { AppComponents, IAppContext, IAppProvider } from '../types/context/IAppC
 export const AppContext = createContext<IAppContext>({} as IAppContext);
 
 export const AppProvider: FC<IAppProvider> = ({ children }) => {
+    const [hasLoaded, setHasLoaded] = useState(false);
     const [loadedComponents, setLoadedComponents] = useState<AppComponents[]>([]);
 
     const hasFinishedLoading = useMemo(() => {
+        if (hasLoaded) return true;
+
         const requiredLoadedComponents = Object.keys(AppComponents);
 
-        return requiredLoadedComponents.length === loadedComponents.length
+        const isFinishedLoading = requiredLoadedComponents.length === loadedComponents.length
             && requiredLoadedComponents.every((v, i) => v === loadedComponents[i]);
-    }, [loadedComponents]);
+
+        setHasLoaded(isFinishedLoading);
+        return isFinishedLoading;
+    }, [loadedComponents, hasLoaded]);
 
     return (
         <>
