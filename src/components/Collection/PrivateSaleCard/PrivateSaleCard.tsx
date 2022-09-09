@@ -5,12 +5,16 @@ import ConnectWalletButton from '../../Wallet/ConnectWalletButton/ConnectWalletB
 import styles from './PrivateSaleCard.module.scss';
 
 const PrivateSaleCard: FC = () => {
-    const { connectedWallet, isConnected } = useContext(WalletContext);
+    const { connectedWallet, isConnected, disconnect, connect } = useContext(WalletContext);
     const { hyperMintContract, nftContract } = useContext(ContractContext);
     const [isOnEarlyAccessList, setIsOnEarlyAccessList] = useState(false);
 
     const canAccessPrivateSale = useMemo(() => isConnected && isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
     const cantAccessPrivateSale = useMemo(() => isConnected && !isOnEarlyAccessList, [isConnected, isOnEarlyAccessList]);
+
+    const contractHasWhitelists = useMemo(() => {
+        return (nftContract?.whitelists.length ?? 0) > 0;
+    }, [nftContract?.whitelists]);
 
     const getWalletAllocation = async (walletAddress?: string) => {
         if (!walletAddress) {
@@ -36,7 +40,7 @@ const PrivateSaleCard: FC = () => {
 
     if (canAccessPrivateSale) return null;
 
-    if (cantAccessPrivateSale) {
+    if (cantAccessPrivateSale && contractHasWhitelists) {
         return (
             <article className={styles.card}>
                 <div className={styles.cardContentBlock}>
@@ -44,7 +48,10 @@ const PrivateSaleCard: FC = () => {
                     <p className={styles.cardContent}>Wallet {connectedWallet?.formattedAddress} does not appear to be on the access list for early access. Check back during the public sale or disconnect to try again.</p>
                 </div>
 
-                <ConnectWalletButton canAccessPrivateSale={isOnEarlyAccessList} />
+                <ConnectWalletButton
+                    canAccessPrivateSale={isOnEarlyAccessList}
+                    onClick={() => disconnect && disconnect()}
+                />
             </article>
         );
     }
@@ -57,7 +64,10 @@ const PrivateSaleCard: FC = () => {
                     <p className={styles.cardContent}>All private access list members are now free to begin purchasing tokens according to their allocation.</p>
                 </div>
 
-                <ConnectWalletButton canAccessPrivateSale={isOnEarlyAccessList} />
+                <ConnectWalletButton
+                    canAccessPrivateSale={isOnEarlyAccessList}
+                    onClick={() => connect && connect()}
+                />
             </article>
         );
     }

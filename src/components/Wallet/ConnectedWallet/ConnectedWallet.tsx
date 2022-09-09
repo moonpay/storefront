@@ -5,9 +5,19 @@ import { WalletContext } from '../../../context/WalletContext';
 import styles from './ConnectedWallet.module.scss';
 
 const ConnectedWallet: FC = () => {
-    const { isConnected, disconnect, connectedWallet } = useContext(WalletContext);
+    const { isConnected, disconnect, connect, connectedWallet } = useContext(WalletContext);
 
-    if (!isConnected) return null;
+    if (!isConnected) {
+        return (
+            <div className={styles.connectedWallet}>
+                <button className={styles.wrapperButton} onClick={connect}>
+                    <img src={walletIcon} />
+
+                    <p className={`${styles.walletText} ${styles.connectWalletText}`}>Connect</p>
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.connectedWallet}>
@@ -20,7 +30,7 @@ const ConnectedWallet: FC = () => {
                 <p className={styles.walletText}>Disconnect Wallet</p>
             </div>
 
-            <button className={styles.wrapperButton}>
+            <button className={`${styles.wrapperButton} ${styles.disconnectButton}`}>
                 <img src={walletIcon} />
                 <p className={`${styles.connectedWalletMeta} ${styles.withSpacer}`}>{connectedWallet?.formattedAddress}</p>
                 <p className={styles.connectedWalletMeta}>{connectedWallet?.formattedBalance}</p>

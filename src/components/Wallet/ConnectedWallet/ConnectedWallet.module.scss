@@ -8,7 +8,7 @@
             display: flex;
         }
 
-        > .wrapperButton {
+        > .disconnectButton {
             display: none;
         }
     }
@@ -36,6 +36,17 @@
     font-weight: var(--font-weight-semiBold);
 }
 
+.connectWalletText {
+    color: rgba(var(--color-white));
+    margin-left: var(--spacing-small);
+
+    @media screen and (min-width: 768px) {
+        &::after {
+            content: ' Wallet'
+        }
+    }
+}
+
 .connectedWalletMeta {
     color: rgb(var(--color-white));
     margin: 0 var(--spacing-xxsmall);
@@ -48,11 +59,12 @@
 }
 
 .wrapperButton {
-    appearance: none;
-    outline: none;
-    border: 0;
-    background-color: transparent;
-    display: flex;
     align-items: center;
+    appearance: none;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    display: flex;
     justify-content: center;
+    outline: none;
 }

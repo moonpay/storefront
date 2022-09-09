@@ -4,15 +4,16 @@ import styles from './ConnectWalletButton.module.scss';
 
 interface IConnectWalletButton {
     canAccessPrivateSale?: boolean;
+    onClick: () => void
 }
 
-const ConnectWalletButton: FC<IConnectWalletButton> = ({ canAccessPrivateSale }) => {
-    const { isConnected, disconnect, connect } = useContext(WalletContext);
+const ConnectWalletButton: FC<IConnectWalletButton> = ({ canAccessPrivateSale, onClick }) => {
+    const { isConnected } = useContext(WalletContext);
 
     if (isConnected && !canAccessPrivateSale) {
         return (
             <button
-                onClick={() => disconnect && disconnect()}
+                onClick={onClick}
                 className={styles.button}
             >
                 Disconnect
@@ -24,7 +25,7 @@ const ConnectWalletButton: FC<IConnectWalletButton> = ({ canAccessPrivateSale })
         return (
             <button
                 className={`${styles.button} ${styles.connectButton}`}
-                onClick={connect}
+                onClick={onClick}
             >
                 Access Sale
             </button>

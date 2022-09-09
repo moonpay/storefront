@@ -16,6 +16,13 @@ interface IHeader {
     setPrivateSaleLive: (isLive: boolean) => void;
 }
 
+const mintedCountFormatter = new Intl.NumberFormat('en-GB', {
+    notation: 'compact',
+    compactDisplay: 'short',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+});
+
 const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, totalMintedTokens, saleClosesAt, setPublicSaleLive, setPrivateSaleLive }) => {
     const { nftContract } = useContext(ContractContext);
 
@@ -49,7 +56,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
                         {saleHasEnded ? (
                             <div className={`${styles.countdown} ${styles.saleEndedCard}`}>
                                 <p className={styles.countdownTitle}>
-                                    The sale has ended <span className={styles.contentEmphasis}>{totalMintedTokens} tokens were minted</span>
+                                    Sale has ended: <span className={styles.contentEmphasis}>{mintedCountFormatter.format(1000000)} tokens minted</span>
                                 </p>
                             </div>
                         ) : (
