@@ -1,5 +1,4 @@
 import { FC, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
 import EVMWalletHelpers from '../../../utils/EVMWalletHelpers';
 import { ContractContext } from '../../../context/ContractContext';
 import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
@@ -13,21 +12,23 @@ import BuyWithCardButton from '../BuyWithCardButton';
 import Toast from '../../../utils/Toast';
 import styles from './TokenCard.module.scss';
 
+interface ITokenCardToken {
+    id: number;
+    description: string;
+    external_url?: string | null
+    image?: string;
+    maxPerTransaction: number;
+    name: string;
+    price?: number;
+    remaining: number;
+    type: NFTContractType;
+}
+
 interface ITokenCard {
-    token: {
-        id: string;
-        name: string;
-        maxPerTransaction: number;
-        description?: string;
-        external_url?: string;
-        image: string;
-        remaining: number;
-        price?: number;
-        type: NFTContractType
-    };
+    token: ITokenCardToken; // TODO; use new token types
     publicSaleLive: boolean;
     allocation?: ITokenAllocationBreakdown[];
-    onSuccessfulPurchase: (tokeId: string) => void;
+    onSuccessfulPurchase: (tokeId: number) => void;
 }
 
 const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSuccessfulPurchase }) => {

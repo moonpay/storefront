@@ -59,7 +59,6 @@ export const WalletProvider: FC<IWalletProvider> = ({ children }) => {
 
         const onHandleWalletChainChanged = async ({ detail }: any) => {
             if (!detail.isSupported) {
-                // TODO: add toast error type
                 Toast.errorToast('Selected chain is not supported');
                 await disconnect();
                 await connect();

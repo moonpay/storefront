@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { IWalletProvider } from '../context/IWalletContext';
 import { IWallet } from './IWallet';
-import { IToken, ITokenMetadata, ITokenAllocationBreakdown } from './IToken';
+import { IToken, ITokenMetadata, ITokenAllocationBreakdown, IListToken } from './IToken';
 import { ITransaction, TransactionStatus } from './ITransaction';
 
 export enum NFTContractMetadataType {
@@ -57,20 +57,18 @@ export interface INFTContract {
         contractUrl?: string;
         tokenUrl?: string;
     };
-    // TODO: add better types here
     network: {
-        chainId: number;
+        chainId: NetworkChain;
         contractAddress: string;
-        contractType: 'ERC721' | 'ERC1155';
-        environment: string;
-        type: string;
+        contractType: NFTContractType;
+        environment: NetworkEnvironment;
+        type: NetworkType;
     }
 }
 
 export interface IHyperMintContract {
     signer?: ethers.Signer | null;
 
-    // TODO: temp
     getTotalMinted: (tokenId: number) => Promise<number>;
     getConnectedWallet: () => Promise<IWallet>;
 
@@ -79,7 +77,7 @@ export interface IHyperMintContract {
     disconnect: () => void;
     getContractInformation: () => Promise<INFTContract>;
     getTokenBalance: () => Promise<number>;
-    getTokens: () => Promise<IToken[]>;
+    getTokens: () => Promise<IListToken[]>;
     getToken: (tokenId: number) => Promise<IToken>;
     getTokenAllocation: (tokenId: string, walletAddress: string) => Promise<ITokenAllocationBreakdown[]>;
     getTokenMetadataUrl: (tokenId: number) => Promise<string>;

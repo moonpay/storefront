@@ -2,6 +2,9 @@ export interface ITokenMetadata {
     name: string;
     description: string;
     image: string;
+    animation_url?: string | null;
+    attributes?: unknown | null;
+    external_url?: string | null;
 }
 
 export interface ITokenAllocationBreakdown {
@@ -11,11 +14,22 @@ export interface ITokenAllocationBreakdown {
 
 export interface IToken {
     id: number;
-    price: number;
-    supply: number;
-    remaining: number;
-    totalSupply: number;
+    animation_url?: string | null;
+    attributes?: unknown | null;
+    description: string;
+    external_url?: string | null
+    image: string;
     maxPerTransaction: number;
-    tokenAddress?: string;
-    tokenAccountAddress?: string;
+    name: string;
+    price: number;
+    remaining: number;
+}
+
+export interface IListToken {
+    id: number;
+    maxPerTransaction: number;
+    price: number;
+    remaining: number;
+    supply: number;
+    totalSupply: number;
 }

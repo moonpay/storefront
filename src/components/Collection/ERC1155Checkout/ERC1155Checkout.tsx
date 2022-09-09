@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 import { ThemeContext } from '../../../context/ThemeContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
+import { IToken } from '../../../types/HyperMint/IToken';
 import Container from '../../Layout/Container';
 import Footer from '../../Layout/Footer';
 import TokenCard from '../../Token/TokenCard';
@@ -8,9 +9,9 @@ import CollectionDetails from '../CollectionDetails';
 import styles from './ERC1155Checkout.module.scss';
 
 interface IERC1155Checkout {
-    tokens: any[];
+    tokens: IToken[];
     publicSaleLive: boolean;
-    onSuccessfulPurchase: (tokenId: string) => void;
+    onSuccessfulPurchase: (tokenId: number) => void;
 }
 
 const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive, onSuccessfulPurchase }) => {

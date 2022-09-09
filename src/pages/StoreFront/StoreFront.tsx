@@ -3,7 +3,7 @@ import { FC, useContext, useEffect, useMemo, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { ContractContext } from '../../context/ContractContext';
 import ERC721Checkout from '../../components/Collection/ERC721Checkout';
-import { IToken } from '../../types/HyperMint/IToken';
+import { IListToken, IToken } from '../../types/HyperMint/IToken';
 import ERC1155Checkout from '../../components/Collection/ERC1155Checkout';
 import { NFTContractType } from '../../types/HyperMint/IContract';
 import Header from '../../components/Layout/Header';
@@ -25,11 +25,11 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
     const [privateSaleLive, setPrivateSaleLive] = useState(false);
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
     const [totalMintedTokens, setTotalMintedTokens] = useState<number>();
-    const [contractTokens, setContractTokens] = useState<any[]>();
+    const [contractTokens, setContractTokens] = useState<IToken[]>();
 
     const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
 
-    const getToken = async (token: IToken): Promise<any> => {
+    const getToken = async (token: IListToken): Promise<IToken | undefined> => {
         try {
             const id = contractIsERC721 ? 0 : token.id;
             const metadata = await hyperMintContract?.getTokenMetadata(id);
@@ -51,7 +51,6 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
     const getContractTokens = async () => {
         const contractTokens = await hyperMintContract?.getTokens() ?? [];
 
-        // TODO: improve error handling
         if ((contractTokens as any).error) {
             setContractTokens(undefined);
         }
@@ -60,12 +59,11 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
             contractTokens.reduce((prev, cur) => prev + cur.supply, 0)
         );
 
-        // TODO: add type
-        const tokensWithData = contractIsERC721
+        const tokensWithData: any = contractIsERC721
             ? contractTokens
             : await Promise.all(contractTokens.map(token => getToken(token)));
 
-        setContractTokens(tokensWithData);
+        setContractTokens(tokensWithData as IToken[]);
 
         appContext.setLoadedComponents([
             ...appContext?.loadedComponents ?? [],

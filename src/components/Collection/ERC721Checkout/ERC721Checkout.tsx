@@ -4,7 +4,7 @@ import mysteryTokenImage from '../../../assets/token.png';
 import { WalletContext } from '../../../context/WalletContext';
 import { ContractContext } from '../../../context/ContractContext';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
-import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
+import { IToken, ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
 import PrivateSaleCard from '../PrivateSaleCard';
 import { ThemeContext } from '../../../context/ThemeContext';
 import Container from '../../Layout/Container';
@@ -13,7 +13,7 @@ import CollectionDetails from '../CollectionDetails';
 import styles from './ERC721Checkout.module.scss';
 
 interface IERC721Checkout {
-    token?: any; // TODO: add token types
+    token?: IToken;
     publicSaleLive: boolean;
     onSuccessfulPurchase: () => void;
 }
@@ -69,7 +69,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, onSuccessf
                 <div className={styles.heroGrid}>
                     <CollectionDetails />
 
-                    {canPurchase ? (
+                    {(canPurchase && token) ? (
                         <div className={styles.limiter}>
                             <TokenCard
                                 token={{
