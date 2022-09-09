@@ -7,9 +7,8 @@
 .headerContainer {
     display: grid;
     max-width: 1600px;
-    grid-template-areas: 'wallet'
-                          'logo'
-                          'counters';
+    grid-template-areas: 'logo wallet'
+                          'counters counters';
     padding: var(--spacing-large);
     margin: 0 auto;
     gap: var(--spacing-large);
@@ -21,7 +20,6 @@
 
 .logo {
     grid-area: logo;
-    margin: 0 auto;
     display: flex;
     align-items: center;
 
@@ -45,7 +43,11 @@
 .connectedWallet {
     grid-area: wallet;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
+
+    @media screen and (min-width: 1024px) {
+        justify-content: center;
+    }
 }
 
 .countdown {
