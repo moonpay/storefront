@@ -129,6 +129,7 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
                     <ERC721Checkout
                         token={contractTokens ? contractTokens[0] : undefined}
                         publicSaleLive={publicSaleLive}
+                        onSuccessfulPurchase={getContractTokens}
                     />
                 ) : (
                     <ERC1155Checkout

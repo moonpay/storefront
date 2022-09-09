@@ -127,7 +127,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         }, 0);
 
         return remainingAllocation;
-    }, [allocation]);
+    }, [allocation, token]);
 
     const inputHasError = useMemo(() => {
         if (maxAllocation === undefined) return false;

@@ -15,9 +15,10 @@ import styles from './ERC721Checkout.module.scss';
 interface IERC721Checkout {
     token?: any; // TODO: add token types
     publicSaleLive: boolean;
+    onSuccessfulPurchase: () => void;
 }
 
-const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
+const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive, onSuccessfulPurchase }) => {
     const themeContext = useContext(ThemeContext);
     const { hyperMintContract, nftContract } = useContext(ContractContext);
     const { connectedWallet, isConnected } = useContext(WalletContext);
@@ -38,6 +39,11 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
         setAllocation(walletAllocation);
 
         return walletAllocation ?? [];
+    };
+
+    const onPurchase = async () => {
+        await onSuccessfulPurchase();
+        await getWalletAllocation(connectedWallet?.address);
     };
 
     useEffect(() => {
@@ -76,7 +82,7 @@ const ERC721Checkout: FC<IERC721Checkout> = ({ token, publicSaleLive }) => {
                                 }}
                                 publicSaleLive={publicSaleLive}
                                 allocation={allocation}
-                                onSuccessfulPurchase={async () => await getWalletAllocation(connectedWallet?.address)}
+                                onSuccessfulPurchase={onPurchase}
                             />
                         </div>
                     ) : (
