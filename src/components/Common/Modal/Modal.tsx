@@ -5,17 +5,18 @@ interface IModal {
     header?: JSX.Element;
     content: JSX.Element;
     isOpen?: boolean;
+    className?: string;
     onClose: () => void;
 }
 
-const Modal: FC<IModal> = ({ content, header, isOpen, onClose }) => (
+const Modal: FC<IModal> = ({ content, header, isOpen, className, onClose }) => (
     <div
         className={`${styles.modalWrap} ${isOpen ? styles.modalWrapActive : styles.modalWrapClose}`}
         onClick={onClose}
         tabIndex={0}
     >
         <div
-            className={`${styles.modal} ${isOpen && styles.modalActive}`}
+            className={`${styles.modal} ${className} ${isOpen && styles.modalActive}`}
             onClick={e => e.stopPropagation()}
         >
             <div className={styles.modalHeaderWrap}>

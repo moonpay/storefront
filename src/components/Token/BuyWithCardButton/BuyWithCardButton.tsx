@@ -38,6 +38,7 @@ const BuyWithCardButton: FC<IBuyWithCardButton> = ({ disabled, tokenId }) => {
             <Modal
                 isOpen={!!moonPayUrl}
                 onClose={onClose}
+                className={styles.modal}
                 content={
                     <iframe
                         className={styles.moonPayFrame}
