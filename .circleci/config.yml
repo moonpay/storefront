@@ -95,7 +95,7 @@ workflows:
       - build-storefront:
           requires:
             - install-dependencies
-      - deploy-demo-storefront:
+      - deploy-example-storefront:
           context: aws-config
           requires:
             - build-storefront
