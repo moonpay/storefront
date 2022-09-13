@@ -12,6 +12,7 @@ import { ContentProvider } from '../../context/ContentContext';
 import ConfigurationImporter from '../../utils/ConfigurationImporter';
 import { AppContext } from '../../context/AppContext';
 import { AppComponents } from '../../types/context/IAppContext';
+import InfoBanner from '../../components/Layout/InfoBanner';
 
 interface IStoreFront {
     configurationImporter: ConfigurationImporter;
@@ -26,6 +27,7 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
     const [totalMintedTokens, setTotalMintedTokens] = useState<number>();
     const [contractTokens, setContractTokens] = useState<IToken[]>();
+    const [showInfoBanner, setShowInfoBanner] = useState(true);
 
     const contractIsERC721 = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
 
@@ -113,6 +115,10 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
                     position="top-center"
                     reverseOrder={false}
                 />
+
+                {showInfoBanner && (
+                    <InfoBanner onHide={() => setShowInfoBanner(false)} />
+                )}
 
                 <Header
                     publicSaleLive={publicSaleLive}

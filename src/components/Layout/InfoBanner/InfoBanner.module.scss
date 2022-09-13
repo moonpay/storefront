@@ -1,0 +1,64 @@
+.banner {
+    --banner-color-start: 85, 0, 173;
+    --banner-color-end: 54, 124, 180;
+    --color-banner-content: 200, 198, 206;
+
+    position: relative;
+    width: 100vw;
+    color: rgb(var(--color-white));
+    background: linear-gradient(to right, rgb(var(--banner-color-start)), rgb(var(--banner-color-end)));
+}
+
+.bannerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bannerLeft {
+    display: flex;
+    align-items: center;
+
+    &:visited,
+    &:active {
+        text-decoration: none;
+    }
+}
+
+.bannerHeading {
+    color: rgb(var(--color-white));
+    font-weight: var(--font-weight-bold);
+}
+
+.bannerContent {
+    color: rgb(var(--color-banner-content));
+    cursor: pointer;
+
+    @media screen and (min-width: 1024px) {
+        &:hover {
+            ~ .linkButton {
+                transform: translateX(var(--spacing-xsmall));
+            }
+        }
+    }
+}
+
+.linkButton {
+    display: none;
+
+    @media screen and (min-width: 1024px) {
+        cursor: pointer;
+        display: block;
+        height: 24px;
+        padding-left: var(--spacing-xlarge);
+        object-fit: contain;
+        transition: transform .15s ease-in-out;
+        width: 24px;
+    }
+}
+
+.closeButton {
+    cursor: pointer;
+    padding: var(--spacing-xsmall) 0 var(--spacing-xsmall) var(--spacing-xsmall);
+    margin-left: var(--spacing-xlarge);
+}
