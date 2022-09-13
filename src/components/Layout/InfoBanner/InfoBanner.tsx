@@ -14,7 +14,7 @@ const InfoBanner: FC<IInfoBanner> = ({ onHide }) => (
             className={styles.bannerContainer}
             width="wide"
         >
-            <a href="" className={styles.bannerLeft}>
+            <a href="https://docs.hypermint.com/experiences" className={styles.bannerLeft}>
                 <p className={styles.bannerContent}>
                     <strong className={styles.bannerHeading}>HyperMint Storefront Experiences:</strong> Pre-built customisable templates. Discover how they work.
                 </p>
