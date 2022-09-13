@@ -1,6 +1,6 @@
 export default {
     images: {
-        background: require('../assets/background.png'),
+        background: require('../assets/background.jpg'),
         logo: require('../assets/logo.png'),
     },
     colors: {
