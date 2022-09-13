@@ -4,6 +4,7 @@ import Countdown from '../../Common/Countdown';
 import ConnectedWallet from '../../Wallet/ConnectedWallet';
 import { NFTContractType } from '../../../types/HyperMint/IContract';
 import Logo from '../../Common/Logo';
+import Container from '../Container';
 import styles from './Header.module.scss';
 
 interface IHeader {
@@ -42,7 +43,10 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
 
     return (
         <header className={styles.header}>
-            <div className={styles.headerContainer}>
+            <Container
+                className={styles.headerContainer}
+                width="wide"
+            >
                 <div className={styles.logo}>
                     <Logo />
                 </div>
@@ -84,7 +88,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
                         )}
                     </section>
                 )}
-            </div>
+            </Container>
         </header>
     );
 };
