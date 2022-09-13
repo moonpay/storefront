@@ -31,7 +31,10 @@ const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive, onSucce
                 </Container>
             </div>
 
-            <Container className={styles.main} narrow>
+            <Container
+                className={styles.main}
+                width="narrow"
+            >
                 <section className={styles.grid}>
                     {(tokens.filter(t => !!t) ?? []).map((token) => (
                         <TokenCard

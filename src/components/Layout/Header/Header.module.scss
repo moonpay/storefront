@@ -7,11 +7,9 @@
 
 .headerContainer {
     display: grid;
-    max-width: 1600px;
     grid-template-areas: 'logo wallet'
                           'counters counters';
     padding: var(--spacing-large);
-    margin: 0 auto;
     gap: var(--spacing-large);
 
     @media screen and (min-width: 1024px) {
