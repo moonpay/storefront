@@ -55,15 +55,43 @@ jobs:
           at: .
       - run:
           name: Upload website to the S3 bucket
+          command: aws s3 sync build/ s3://demo.hypermint.com/
+
+  deploy-example-storefront:
+    resource_class: xlarge
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run:
+          name: Install tar utility
+          command: yum install -y tar gzip
+      - attach_workspace:
+          at: .
+      - run:
+          name: Upload website to the S3 bucket
           command: aws s3 sync build/ s3://storefront.hypermint.com/
 
 workflows:
-  build-deploy:
+  build-deploy-demo:
     jobs:
       - install-dependencies:
           filters:
             branches:
               only: main
+      - build-storefront:
+          requires:
+            - install-dependencies
+      - deploy-demo-storefront:
+          context: aws-config
+          requires:
+            - build-storefront
+
+  build-deploy-example:
+    jobs:
+      - install-dependencies:
+          filters:
+            branches:
+              only: example
       - build-storefront:
           requires:
             - install-dependencies
