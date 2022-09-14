@@ -3,10 +3,9 @@
     --banner-color-end: 54, 124, 180;
     --color-banner-content: 200, 198, 206;
 
-    position: relative;
-    width: 100vw;
-    color: rgb(var(--color-white));
     background: linear-gradient(to right, rgb(var(--banner-color-start)), rgb(var(--banner-color-end)));
+    color: rgb(var(--color-white));
+    position: relative;
 }
 
 .bannerContainer {
