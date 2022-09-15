@@ -3,11 +3,13 @@
     --color-white: 255, 255, 255;
     --color-off-white: 188, 184, 194;
     --color-light-grey: 123, 118, 138;
+    --color-light-grey-disabled: 163, 159, 173;
     --color-mid-grey: 237, 237, 239;
+    --color-dark-grey-disabled: 99, 92, 116;
     --color-dark-grey: 246, 246, 247;
     --color-black: 0, 0, 0;
     --color-primary: 22, 230, 181; // THIS IS A FALLBACK. PLEASE CONFIGURE INSIDE /config/theme.ts
-    --color-state-error: 243, 174, 165; // THIS IS A FALLBACK. PLEASE CONFIGURE INSIDE /config/theme.ts
+    --color-state-error: 231, 102, 85; // THIS IS A FALLBACK. PLEASE CONFIGURE INSIDE /config/theme.ts
     --color-state-success: 22, 230, 181; // THIS IS A FALLBACK. PLEASE CONFIGURE INSIDE /config/theme.ts
 
     // Borders
