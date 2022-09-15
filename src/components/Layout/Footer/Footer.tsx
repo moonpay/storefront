@@ -6,7 +6,11 @@ const Footer: FC = () => (
     <footer className={styles.footer}>
         <div className={styles.branding}>
             <p className={styles.title}>Powered By</p>
-            <img src={HyperMint} alt="HyperMint" />
+            <img
+                src={HyperMint}
+                className={styles.hypermint}
+                alt="HyperMint"
+            />
         </div>
     </footer>
 );
