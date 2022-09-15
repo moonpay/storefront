@@ -1,5 +1,4 @@
 import { FC, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import EVMWalletHelpers from '../../../utils/EVMWalletHelpers';
 import { ContractContext } from '../../../context/ContractContext';
 import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
 import TokenAllocationBreakdown from '../TokenAllocationBreakdown/TokenAllocationBreakdown';
@@ -10,6 +9,7 @@ import Modal from '../../Common/Modal';
 import { ContentContext } from '../../../context/ContentContext';
 import BuyWithCardButton from '../BuyWithCardButton';
 import Toast from '../../../utils/Toast';
+import NetworkHelpers from '../../../utils/NetworkHelpers';
 import styles from './TokenCard.module.scss';
 
 interface ITokenCardToken {
@@ -31,6 +31,12 @@ interface ITokenCard {
     onSuccessfulPurchase: (tokeId: number) => void;
 }
 
+const TotalFormatter = new Intl.NumberFormat('en-GB', {
+    notation: 'compact',
+    compactDisplay: 'short',
+    maximumFractionDigits: 3,
+});
+
 const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSuccessfulPurchase }) => {
     const content = useContext(ContentContext);
     const { nftContract, hyperMintContract } = useContext(ContractContext);
@@ -42,6 +48,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
     const [showingDetails, setShowingDetails] = useState(false);
 
     const isERC721Contract = useMemo(() => nftContract?.network.contractType === NFTContractType.ERC721, [nftContract]);
+    const tokenSymbol = useMemo(() => nftContract ? NetworkHelpers.getSymbolForNetwork(nftContract.network.type) : 'ETH', [nftContract]);
 
     const doesWalletHaveAllocation = async (walletAddress?: string): Promise<boolean> => {
         // We pass in allocation for 721 contracts
@@ -130,7 +137,7 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
         return remainingAllocation;
     }, [allocation, token]);
 
-    const inputHasError = useMemo(() => {
+    const inputError = useMemo(() => {
         if (maxAllocation === undefined) return false;
 
         return !!(quantity > maxAllocation);
@@ -226,10 +233,6 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                     <div className={showBreakdown ? styles.breakdownShowing : styles.quantityInput}>
                                         <div className={styles.inputHeader}>
                                             <label htmlFor="quantity" className={styles.inputContent}>Quantity</label>
-
-                                            {maxAllocation > 0 && (
-                                                <span className={styles.inputContent}>Max. {maxAllocation}</span>
-                                            )}
                                         </div>
 
                                         <div className={styles.inputWrap}>
@@ -238,28 +241,32 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
                                                 id="quantity"
                                                 name="quantity"
                                                 value={quantity.toString()}
-                                                className={`${styles.input} ${inputHasError && styles.inputError}`}
+                                                className={`${styles.input} ${inputError && styles.inputWithError}`}
                                                 onChange={e => setQuantity(Number(e.target.value))}
                                                 min={1}
                                                 max={maxAllocation && maxAllocation > 0 ? maxAllocation : undefined}
                                                 disabled={token.remaining === 0}
                                             />
+
+                                            {!!inputError && (
+                                                <span className={styles.inputError}>Max quantity is {maxAllocation} per transaction</span>
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className={styles.purchaseButtons}>
                                         <TokenPurchaseButton
-                                            total={EVMWalletHelpers.formatBalance(totalCost.toString(), nftContract)}
+                                            total={`${TotalFormatter.format(totalCost)} ${tokenSymbol}`}
                                             onPurchase={onPurchase}
                                             purchasing={purchasing}
-                                            disabled={inputHasError}
+                                            disabled={!!inputError}
                                             soldOut={token.remaining === 0}
                                         />
 
                                         {nftContract?.allowBuyWithMoonPay && token.remaining > 0 && (
                                             <BuyWithCardButton
                                                 tokenId={Number(token.id)}
-                                                disabled={inputHasError}
+                                                disabled={!!inputError}
                                             />
                                         )}
                                     </div>
