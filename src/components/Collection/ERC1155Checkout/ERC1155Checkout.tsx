@@ -24,7 +24,7 @@ const ERC1155Checkout: FC<IERC1155Checkout> = ({ tokens, publicSaleLive, onSucce
                 style={{ backgroundImage: `url(${themeContext.images?.background})` }}
             >
 
-                <Container className={styles.heroContainer}>
+                <Container className={styles.heroContainer} width="narrow">
                     <div className={styles.heroContent}>
                         <CollectionDetails />
                     </div>

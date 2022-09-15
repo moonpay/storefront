@@ -1,7 +1,9 @@
 .container {
+    box-sizing: border-box;
     margin: 0 auto;
     max-width: 1200px;
     padding: var(--spacing-large);
+    width: 100%;
 }
 
 .narrowContainer {
