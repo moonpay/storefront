@@ -21,7 +21,7 @@ export default class EVMWalletHelpers {
         const formatter = new Intl.NumberFormat('en-GB', {
             notation: 'compact',
             compactDisplay: 'short',
-            minimumFractionDigits: 1,
+            minimumFractionDigits: 0,
             maximumFractionDigits: 2,
         });
 
