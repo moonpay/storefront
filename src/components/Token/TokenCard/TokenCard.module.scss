@@ -63,14 +63,15 @@
 
 .inputWrap {
     display: flex;
-    margin-bottom: var(--spacing-regular);
+    margin-bottom: var(--spacing-xxlarge);
+    position: relative;
 }
 
 .input {
     appearance: none;
-    background-color: rgba(246, 246, 247, 0.12);
+    background-color: rgba(var(--color-dark-grey), 0.12);
     border-radius: var(--border-radius-regular);
-    border: 0;
+    border: 1px solid rgba(var(--color-dark-grey), 0.12);
     color: rgb(var(--color-white));
     flex-grow: 1;
     padding: var(--spacing-regular) var(--spacing-small);
@@ -81,10 +82,17 @@
     }
 }
 
-.inputError {
+.inputWithError {
     border: 1px solid rgb(var(--color-state-error));
-    color: rgb(var(--color-state-error));
     outline: rgb(var(--color-state-error));
+}
+
+.inputError {
+    position: absolute;
+    top: 100%;
+    margin-top: var(--spacing-xxsmall);
+    font-size: var(--font-size-h3);
+    color: rgb(var(--color-state-error));
 }
 
 .inputHeader {

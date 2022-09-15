@@ -3,7 +3,7 @@
 }
 
 .toggle {
-    background-color: rgba(246, 246, 247, 0.12);
+    background-color: rgba(var(--color-dark-grey), 0.12);
     border-radius: var(--border-radius-regular);
     color: rgb(var(--color-white));
     padding: var(--spacing-xsmall) var(--spacing-small);
@@ -23,7 +23,7 @@
 }
 
 .breakdown {
-    background-color: rgba(246, 246, 247, 0.12);
+    background-color: rgba(var(--color-dark-grey), 0.12);
     border-bottom-left-radius: var(--border-radius-regular);
     border-bottom-right-radius: var(--border-radius-regular);
     height: 81px;
