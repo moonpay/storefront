@@ -11,6 +11,7 @@ interface IHeader {
     publicSaleLive: boolean;
     privateSaleLive: boolean;
     totalMintedTokens?: number;
+    totalTokenCount: number;
     privateSaleDate?: Date;
     saleClosesAt?: Date;
     setPublicSaleLive: (isLive: boolean) => void;
@@ -24,7 +25,7 @@ const mintedCountFormatter = new Intl.NumberFormat('en-GB', {
     maximumFractionDigits: 2,
 });
 
-const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, totalMintedTokens, saleClosesAt, setPublicSaleLive, setPrivateSaleLive }) => {
+const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate, totalMintedTokens, saleClosesAt, totalTokenCount, setPublicSaleLive, setPrivateSaleLive }) => {
     const { nftContract } = useContext(ContractContext);
 
     const shouldShowPrivateSaleCounter = useMemo(() => {
@@ -38,7 +39,7 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
 
         const saleHasClosed = saleClosesAt ? saleClosesAt < new Date() : false;
 
-        return saleHasClosed || Number(totalMintedTokens) === Number(nftContract?.tokenCount ?? 0);
+        return saleHasClosed || Number(totalMintedTokens) === totalTokenCount;
     }, [saleClosesAt, nftContract, totalMintedTokens]);
 
     return (
@@ -60,7 +61,9 @@ const Header: FC<IHeader> = ({ publicSaleLive, privateSaleLive, privateSaleDate,
                         {saleHasEnded ? (
                             <div className={`${styles.countdown} ${styles.saleEndedCard}`}>
                                 <p className={styles.countdownTitle}>
-                                    Sale has ended: <span className={styles.contentEmphasis}>{mintedCountFormatter.format(1000000)} tokens minted</span>
+                                    Sale has ended: {totalMintedTokens && (
+                                        <span className={styles.contentEmphasis}>{mintedCountFormatter.format(totalMintedTokens)} tokens minted</span>
+                                    )}
                                 </p>
                             </div>
                         ) : (
