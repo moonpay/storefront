@@ -16,7 +16,7 @@
 
 .disconnectWallet {
     align-items: center;
-    background-color: rgba(var(--color-state-error));
+    background-color: rgb(var(--color-state-error));
     border-radius: var(--border-radius-regular);
     color: rgb(var(--color-black));
     cursor: pointer;
@@ -37,7 +37,7 @@
 }
 
 .connectWalletText {
-    color: rgba(var(--color-white));
+    color: rgb(var(--color-white));
     margin-left: var(--spacing-small);
 
     @media screen and (min-width: 768px) {

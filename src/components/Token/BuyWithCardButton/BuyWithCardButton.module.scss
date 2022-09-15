@@ -11,6 +11,12 @@
     min-height: 50px;
     padding: var(--spacing-small);
     width: 100%;
+
+    &:disabled {
+        border: 2px solid rgb(var(--color-dark-grey-disabled));
+        color: rgb(var(--color-light-grey-disabled));
+        cursor: not-allowed;
+    }
 }
 
 .modal {

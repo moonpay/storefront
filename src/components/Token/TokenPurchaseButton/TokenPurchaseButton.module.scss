@@ -13,8 +13,9 @@
     width: 100%;
 
     &:disabled {
+        background-color: rgb(var(--color-dark-grey-disabled));
+        color: rgb(var(--color-light-grey-disabled));
         cursor: not-allowed;
-        opacity: 0.75;
     }
 }
 

@@ -6,6 +6,6 @@ export default {
     colors: {
         primary: '125, 0, 255',
         success: '22, 230, 181',
-        error: '243, 174, 165'
+        error: '231, 102, 85'
     }
 };
