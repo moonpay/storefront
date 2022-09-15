@@ -15,8 +15,9 @@
 }
 
 .bannerLeft {
-    display: flex;
     align-items: center;
+    display: flex;
+    text-decoration: none;
 
     &:visited,
     &:active {
