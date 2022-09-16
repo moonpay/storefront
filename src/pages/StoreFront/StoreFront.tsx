@@ -26,6 +26,7 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
     const [privateSaleLive, setPrivateSaleLive] = useState(false);
     const [privateSaleDate, setPrivateSaleDate] = useState<Date>();
     const [totalMintedTokens, setTotalMintedTokens] = useState<number>();
+    const [totalTokenCount, setTotalTokenCount] = useState(0);
     const [contractTokens, setContractTokens] = useState<IToken[]>();
     const [showInfoBanner, setShowInfoBanner] = useState(true);
 
@@ -56,6 +57,8 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
         if ((contractTokens as any).error) {
             setContractTokens(undefined);
         }
+
+        setTotalTokenCount(contractTokens.reduce((prev, cur) => prev + cur.totalSupply, 0));
 
         setTotalMintedTokens(
             contractTokens.reduce((prev, cur) => prev + cur.supply, 0)
@@ -127,6 +130,7 @@ const StoreFront: FC<IStoreFront> = ({ configurationImporter }) => {
                     setPublicSaleLive={setPublicSaleLive}
                     setPrivateSaleLive={setPrivateSaleLive}
                     totalMintedTokens={totalMintedTokens}
+                    totalTokenCount={totalTokenCount}
                 />
 
                 {contractIsERC721 ? (
