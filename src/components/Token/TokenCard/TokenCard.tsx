@@ -1,6 +1,6 @@
 import { FC, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { ContractContext } from '../../../context/ContractContext';
-import { ITokenAllocationBreakdown } from '../../../types/HyperMint/IToken';
+import { ITokenAllocationBreakdown,IToken } from '../../../types/HyperMint/IToken';
 import TokenAllocationBreakdown from '../TokenAllocationBreakdown/TokenAllocationBreakdown';
 import TokenPurchaseButton from '../TokenPurchaseButton/TokenPurchaseButton';
 import { WalletContext } from '../../../context/WalletContext';
@@ -12,17 +12,10 @@ import Toast from '../../../utils/Toast';
 import NetworkHelpers from '../../../utils/NetworkHelpers';
 import styles from './TokenCard.module.scss';
 
-interface ITokenCardToken {
-    id: number;
-    description: string;
-    external_url?: string | null
-    image?: string;
-    maxPerTransaction: number;
-    name: string;
-    price?: number;
-    remaining: number;
+interface ITokenCardToken extends IToken{
     type: NFTContractType;
 }
+
 
 interface ITokenCard {
     token: ITokenCardToken; // TODO; use new token types
@@ -209,17 +202,28 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
 
                     <main>
                         <div className={styles.imageWrap}>
-                            <img
-                                src={token?.image}
-                                className={styles.image}
-                            />
-
+                            {
+                                token.animation_url?
+                                    <video
+                                        controls={true}
+                                        src={token?.animation_url}
+                                        className={styles.image}
+                                        autoPlay={true}
+                                        muted={true}
+                                    />:
+                                    <img
+                                        src={token?.image}
+                                        className={styles.image}
+                                    />
+                            }
+                            
                             {token.remaining !== undefined && (
                                 <div className={styles.remainingCounter}>
                                     <p>{token.remaining} left</p>
                                 </div>
                             )}
                         </div>
+
 
                         {canPurchase && (
                             <div className={styles.form}>

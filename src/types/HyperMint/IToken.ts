@@ -18,7 +18,7 @@ export interface IToken {
     attributes?: unknown | null;
     description: string;
     external_url?: string | null
-    image: string;
+    image?: string;
     maxPerTransaction: number;
     name: string;
     price: number;
