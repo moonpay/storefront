@@ -202,21 +202,20 @@ const TokenCard: FC<ITokenCard> = ({ token, publicSaleLive, allocation, onSucces
 
                     <main>
                         <div className={styles.imageWrap}>
-                            {
-                                token.animation_url?
-                                    <video
-                                        controls={true}
-                                        src={token?.animation_url}
-                                        className={styles.image}
-                                        autoPlay={true}
-                                        muted={true}
-                                    />:
-                                    <img
-                                        src={token?.image}
-                                        className={styles.image}
-                                    />
-                            }
-                            
+                            {token.animation_url ? (
+                                <video
+                                    controls={true}
+                                    src={token?.animation_url}
+                                    className={styles.image}
+                                    autoPlay={true}
+                                    muted={true}
+                                />
+                            ) : (
+                                <img
+                                    src={token?.image}
+                                    className={styles.image}
+                                />
+                            )}    
                             {token.remaining !== undefined && (
                                 <div className={styles.remainingCounter}>
                                     <p>{token.remaining} left</p>
