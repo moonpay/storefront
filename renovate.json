@@ -15,8 +15,8 @@
     "labels": [
       "security"
     ],
-    "assignees": [
-      "@moonpay/product-security-team"
+    "reviewers": [
+      "team:product-security-team"
     ]
   }
 }
